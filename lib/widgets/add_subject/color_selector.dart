@@ -1,6 +1,8 @@
 import 'package:bukutugas/helpers/helpers.dart';
+import 'package:bukutugas/providers/available_color_provider.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ColorSelector extends StatefulWidget {
   final Color color;
@@ -66,13 +68,8 @@ class _ColorSelectorState extends State<ColorSelector> {
         content: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           return Wrap(
-            // TODO: implement remote config to provide available colors
-            children: [
-              HexColor('#F8A488'),
-              HexColor('#5AA897'),
-              HexColor('#45526C'),
-              HexColor('#707070'),
-            ]
+            children: context
+                .read(availableColorProvider)
                 .map(
                   (color) => GestureDetector(
                     onTap: () {

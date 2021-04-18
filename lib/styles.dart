@@ -11,6 +11,8 @@ class AppTheme {
   static final rounded = BorderRadius.circular(6);
   static final roundedLg = BorderRadius.circular(12);
 
+  static final TextStyle errorTextStyle = TextStyle();
+
   static final lightTheme = ThemeData(
     fontFamily: 'Montserrat',
     backgroundColor: darkBlue,

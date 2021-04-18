@@ -1,5 +1,33 @@
+import 'package:bukutugas/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
+class DaySelectorFormField extends FormField<List<int>> {
+  DaySelectorFormField({
+    FormFieldSetter<List<int>>? onSaved,
+    FormFieldValidator<List<int>>? validator,
+    AutovalidateMode? autovalidateMode,
+  }) : super(
+          onSaved: onSaved,
+          validator: validator,
+          initialValue: [],
+          autovalidateMode: autovalidateMode,
+          builder: (FormFieldState<List<int>> state) {
+            return Column(
+              children: [
+                DaySelector(
+                  onChange: (selectedDays) {
+                    state.didChange(selectedDays);
+                  },
+                ),
+                state.hasError
+                    ? ErrorText(message: state.errorText)
+                    : Container()
+              ],
+            );
+          },
+        );
+}
 
 class DaySelector extends HookWidget {
   final void Function(List<int> selectedDays) onChange;
@@ -9,10 +37,6 @@ class DaySelector extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedDay = useState<List<int>>([]);
-
-    useEffect(() {
-      onChange(selectedDay.value..sort());
-    }, [selectedDay.value]);
 
     return Container(
       width: double.infinity,
@@ -30,6 +54,8 @@ class DaySelector extends HookWidget {
               } else {
                 selectedDay.value = [1, ...selectedDay.value];
               }
+
+              onChange(selectedDay.value..sort());
             },
           ),
           DaySelectorItem(
@@ -42,6 +68,8 @@ class DaySelector extends HookWidget {
               } else {
                 selectedDay.value = [2, ...selectedDay.value];
               }
+
+              onChange(selectedDay.value..sort());
             },
           ),
           DaySelectorItem(
@@ -54,6 +82,8 @@ class DaySelector extends HookWidget {
               } else {
                 selectedDay.value = [3, ...selectedDay.value];
               }
+
+              onChange(selectedDay.value..sort());
             },
           ),
           DaySelectorItem(
@@ -66,6 +96,8 @@ class DaySelector extends HookWidget {
               } else {
                 selectedDay.value = [4, ...selectedDay.value];
               }
+
+              onChange(selectedDay.value..sort());
             },
           ),
           DaySelectorItem(
@@ -78,6 +110,8 @@ class DaySelector extends HookWidget {
               } else {
                 selectedDay.value = [5, ...selectedDay.value];
               }
+
+              onChange(selectedDay.value..sort());
             },
           ),
           DaySelectorItem(
@@ -90,6 +124,8 @@ class DaySelector extends HookWidget {
               } else {
                 selectedDay.value = [6, ...selectedDay.value];
               }
+
+              onChange(selectedDay.value..sort());
             },
           ),
           DaySelectorItem(
@@ -102,6 +138,8 @@ class DaySelector extends HookWidget {
               } else {
                 selectedDay.value = [7, ...selectedDay.value];
               }
+
+              onChange(selectedDay.value..sort());
             },
           ),
         ],

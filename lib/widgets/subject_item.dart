@@ -8,7 +8,9 @@ class SubjectItem extends StatelessWidget {
       color: Color(0xFF5AA897),
       borderRadius: AppTheme.roundedLg,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pushNamed('/subject');
+        },
         borderRadius: AppTheme.roundedLg,
         child: Container(
           height: 120.0,

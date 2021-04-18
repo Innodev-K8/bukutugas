@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 class EmojiSelector extends StatefulWidget {
   final String? emoji;
   final void Function(String emoji)? onChange;
+  final bool readOnly;
 
-  const EmojiSelector({Key? key, this.emoji, this.onChange}) : super(key: key);
+  const EmojiSelector(
+      {Key? key, this.emoji, this.onChange, this.readOnly = false})
+      : super(key: key);
 
   @override
   _EmojiSelectorState createState() => _EmojiSelectorState();
@@ -26,7 +29,7 @@ class _EmojiSelectorState extends State<EmojiSelector> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showEmojiPicker();
+        if (!widget.readOnly) showEmojiPicker();
       },
       child: Stack(
         children: [
@@ -48,14 +51,15 @@ class _EmojiSelectorState extends State<EmojiSelector> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Icon(
-              Icons.edit,
-              color: Theme.of(context).backgroundColor,
+          if (!widget.readOnly)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Icon(
+                Icons.edit,
+                color: Theme.of(context).backgroundColor,
+              ),
             ),
-          ),
         ],
       ),
     );

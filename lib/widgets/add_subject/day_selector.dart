@@ -7,6 +7,7 @@ class DaySelectorFormField extends FormField<List<int>> {
     FormFieldSetter<List<int>>? onSaved,
     FormFieldValidator<List<int>>? validator,
     AutovalidateMode? autovalidateMode,
+    bool readOnly = false,
   }) : super(
           onSaved: onSaved,
           validator: validator,
@@ -19,6 +20,7 @@ class DaySelectorFormField extends FormField<List<int>> {
                   onChange: (selectedDays) {
                     state.didChange(selectedDays);
                   },
+                  readOnly: readOnly,
                 ),
                 state.hasError
                     ? ErrorText(message: state.errorText)
@@ -31,8 +33,19 @@ class DaySelectorFormField extends FormField<List<int>> {
 
 class DaySelector extends HookWidget {
   final void Function(List<int> selectedDays) onChange;
+  final bool readOnly;
 
-  DaySelector({required this.onChange});
+  DaySelector({required this.onChange, this.readOnly = false});
+
+  final days = {
+    1: 'S',
+    2: 'S',
+    3: 'R',
+    4: 'K',
+    5: 'J',
+    6: 'S',
+    7: 'M',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -43,106 +56,31 @@ class DaySelector extends HookWidget {
       height: 28.0,
       child: Wrap(
         spacing: 6.0,
-        children: [
-          DaySelectorItem(
-            text: 'S',
-            isSelected: selectedDay.value.contains(1),
-            onTap: () {
-              if (selectedDay.value.contains(1)) {
-                selectedDay.value =
-                    selectedDay.value.where((element) => element != 1).toList();
-              } else {
-                selectedDay.value = [1, ...selectedDay.value];
-              }
+        children: days
+            .map(
+              (key, code) => MapEntry(
+                key,
+                DaySelectorItem(
+                  text: code,
+                  isSelected: selectedDay.value.contains(key),
+                  onTap: () {
+                    if (readOnly) return;
 
-              onChange(selectedDay.value..sort());
-            },
-          ),
-          DaySelectorItem(
-            text: 'S',
-            isSelected: selectedDay.value.contains(2),
-            onTap: () {
-              if (selectedDay.value.contains(2)) {
-                selectedDay.value =
-                    selectedDay.value.where((element) => element != 2).toList();
-              } else {
-                selectedDay.value = [2, ...selectedDay.value];
-              }
+                    if (selectedDay.value.contains(key)) {
+                      selectedDay.value = selectedDay.value
+                          .where((element) => element != key)
+                          .toList();
+                    } else {
+                      selectedDay.value = [key, ...selectedDay.value];
+                    }
 
-              onChange(selectedDay.value..sort());
-            },
-          ),
-          DaySelectorItem(
-            text: 'R',
-            isSelected: selectedDay.value.contains(3),
-            onTap: () {
-              if (selectedDay.value.contains(3)) {
-                selectedDay.value =
-                    selectedDay.value.where((element) => element != 3).toList();
-              } else {
-                selectedDay.value = [3, ...selectedDay.value];
-              }
-
-              onChange(selectedDay.value..sort());
-            },
-          ),
-          DaySelectorItem(
-            text: 'K',
-            isSelected: selectedDay.value.contains(4),
-            onTap: () {
-              if (selectedDay.value.contains(4)) {
-                selectedDay.value =
-                    selectedDay.value.where((element) => element != 4).toList();
-              } else {
-                selectedDay.value = [4, ...selectedDay.value];
-              }
-
-              onChange(selectedDay.value..sort());
-            },
-          ),
-          DaySelectorItem(
-            text: 'J',
-            isSelected: selectedDay.value.contains(5),
-            onTap: () {
-              if (selectedDay.value.contains(5)) {
-                selectedDay.value =
-                    selectedDay.value.where((element) => element != 5).toList();
-              } else {
-                selectedDay.value = [5, ...selectedDay.value];
-              }
-
-              onChange(selectedDay.value..sort());
-            },
-          ),
-          DaySelectorItem(
-            text: 'S',
-            isSelected: selectedDay.value.contains(6),
-            onTap: () {
-              if (selectedDay.value.contains(6)) {
-                selectedDay.value =
-                    selectedDay.value.where((element) => element != 6).toList();
-              } else {
-                selectedDay.value = [6, ...selectedDay.value];
-              }
-
-              onChange(selectedDay.value..sort());
-            },
-          ),
-          DaySelectorItem(
-            text: 'M',
-            isSelected: selectedDay.value.contains(7),
-            onTap: () {
-              if (selectedDay.value.contains(7)) {
-                selectedDay.value =
-                    selectedDay.value.where((element) => element != 7).toList();
-              } else {
-                selectedDay.value = [7, ...selectedDay.value];
-              }
-
-              onChange(selectedDay.value..sort());
-            },
-          ),
-        ],
+                    onChange(selectedDay.value..sort());
+                  },
+                ),
+              ),
+            )
+            .values
+            .toList(),
       ),
     );
   }

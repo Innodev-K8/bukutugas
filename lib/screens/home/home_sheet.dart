@@ -21,7 +21,7 @@ class HomeSheet extends StatelessWidget {
         ),
         Container(
           height: 157,
-          padding: const EdgeInsets.symmetric(vertical: 7.0),
+          padding: const EdgeInsets.only(bottom: 7.0),
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             itemCount: 10,

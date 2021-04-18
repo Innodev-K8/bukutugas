@@ -94,7 +94,10 @@ class AddSubject extends HookWidget {
                         onSaved: (newValue) => subjectTeacher.value = newValue!,
                       ),
                       SizedBox(height: 14.0),
-                      Text('Hari'),
+                      Text(
+                        'Hari',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
                       SizedBox(height: 8.0),
                       DaySelectorFormField(
                         onSaved: (selectedDays) =>

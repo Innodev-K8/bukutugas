@@ -1,4 +1,5 @@
 import 'package:bukutugas/screens/assignment/create_assignment_screen.dart';
+import 'package:bukutugas/screens/assignment/detail_assignment_screen.dart';
 import 'package:bukutugas/screens/home/home_screen.dart';
 import 'package:bukutugas/screens/subject/subject_screen.dart';
 import 'package:bukutugas/styles.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => HomeScreen(),
         '/subject': (context) => SubjectScreen(),
+        '/assignment/detail': (context) => DetailAssignmentScreen(),
         '/assignment/create': (context) => CreateAssignmentScreen(),
       },
     );

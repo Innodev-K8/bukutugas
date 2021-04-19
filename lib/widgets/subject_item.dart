@@ -51,6 +51,7 @@ class SubjectItem extends StatelessWidget {
                             children: [
                               Text(
                                 subject.name ?? '-',
+                                overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.headline3,
                               ),
                               Text(
@@ -79,13 +80,19 @@ class SubjectItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         // TODO: show assignment count
-                        Text(
-                          '',
-                          style: Theme.of(context).textTheme.headline5,
+                        Expanded(
+                          child: Text(
+                            '',
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
                         ),
-                        Text(
-                          subject.teacher ?? '-',
-                          style: Theme.of(context).textTheme.headline5,
+                        Expanded(
+                          child: Text(
+                            subject.teacher ?? '-',
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
                         ),
                       ],
                     ),

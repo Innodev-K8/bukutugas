@@ -4,9 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SubjectSheet extends StatelessWidget {
+class SubjectSheet extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final assignmentProvider = useProvider(assignmentListProvider);
+    final filteredAssignmentList = useProvider(filteredAssignmentListProvider);
+    final assignmentListFilter =
+        useProvider(assignmentListFilterProvider).state;
+
+    String title;
+
+    switch (assignmentListFilter) {
+      case AssignmentListFilter.todo:
+        title = 'Tugas';
+        break;
+      case AssignmentListFilter.done:
+        title = 'Tugas Selesai';
+        break;
+      case AssignmentListFilter.all:
+        title = 'Semua Tugas';
+        break;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -16,41 +35,32 @@ class SubjectSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Tugas',
+                title,
                 style: Theme.of(context).textTheme.headline2,
               ),
               AssignmentFilterSelector()
             ],
           ),
         ),
-        Consumer(
-          builder: (context, watch, child) {
-            final assignmentProvider = watch(assignmentListProvider);
-            final filteredAssignmentList =
-                watch(filteredAssignmentListProvider);
-
-            return assignmentProvider.when(
-              data: (assignments) => filteredAssignmentList.isEmpty
-                  ? EmptyAssignment()
-                  : ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: filteredAssignmentList.length,
-                      scrollDirection: Axis.vertical,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 14.0),
-                      itemBuilder: (context, index) => AssignmentItem(
-                        assignment: filteredAssignmentList[index],
-                      ),
-                    ),
-              error: (e, st) => Text(e.toString()),
-              loading: () => Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          },
-        ),
+        assignmentProvider.when(
+          data: (assignments) => filteredAssignmentList.isEmpty
+              ? EmptyAssignment()
+              : ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: filteredAssignmentList.length,
+                  scrollDirection: Axis.vertical,
+                  separatorBuilder: (context, index) => SizedBox(height: 14.0),
+                  itemBuilder: (context, index) => AssignmentItem(
+                    assignment: filteredAssignmentList[index],
+                  ),
+                ),
+          error: (e, st) => Text(e.toString()),
+          loading: () => Center(
+            child: CircularProgressIndicator(),
+          ),
+        )
       ],
     );
   }

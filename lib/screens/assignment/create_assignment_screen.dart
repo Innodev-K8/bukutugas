@@ -99,57 +99,92 @@ class CreateAssignmentScreen extends HookWidget {
                         ),
                         SizedBox(height: 14.0),
                         DateTimePicker(
-                          style: Theme.of(context).textTheme.headline4,
                           type: DateTimePickerType.dateTime,
                           initialValue: '',
-                          firstDate: DateTime(2000),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2100),
                           dateLabelText: 'Date',
                           validator: (val) {
-                            print(val);
+                            if (val != null && val != '') {
+                              if (DateTime.parse(val)
+                                  .isBefore(DateTime.now())) {
+                                return 'Yah tanggal & jam ini udah lewat...';
+                              }
+                            }
+
                             return null;
                           },
                           onSaved: (newValue) => deadline.value = newValue!,
                           icon: Icon(Icons.today),
                         ),
                         SizedBox(height: 14.0),
-                        Text(
-                          'Lampiran',
-                          style: Theme.of(context).textTheme.headline2,
-                        ),
-                        SizedBox(height: 14.0),
-                        Wrap(
-                          children: [
-                            DottedBorder(
-                              color: darken(
-                                Theme.of(context)
-                                    .bottomSheetTheme
-                                    .backgroundColor!,
-                                0.4,
-                              ),
-                              strokeWidth: 2,
-                              radius: AppTheme.rounded.topLeft,
-                              borderType: BorderType.RRect,
-                              child: Container(
-                                width: 64,
-                                height: 64,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).shadowColor,
-                                  borderRadius: AppTheme.rounded,
+                        Container(
+                          width: double.infinity,
+                          child: Stack(
+                            children: [
+                              Opacity(
+                                opacity: 0.5,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Lampiran',
+                                      style:
+                                          Theme.of(context).textTheme.headline2,
+                                    ),
+                                    SizedBox(height: 14.0),
+                                    Wrap(
+                                      children: [
+                                        DottedBorder(
+                                          color: darken(
+                                            Theme.of(context)
+                                                .bottomSheetTheme
+                                                .backgroundColor!,
+                                            0.4,
+                                          ),
+                                          strokeWidth: 2,
+                                          radius: AppTheme.rounded.topLeft,
+                                          borderType: BorderType.RRect,
+                                          child: Container(
+                                            width: 64,
+                                            height: 64,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Theme.of(context).shadowColor,
+                                              borderRadius: AppTheme.rounded,
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              color: darken(
+                                                Theme.of(context)
+                                                    .bottomSheetTheme
+                                                    .backgroundColor!,
+                                                0.4,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  color: darken(
-                                    Theme.of(context)
-                                        .bottomSheetTheme
-                                        .backgroundColor!,
-                                    0.4,
+                              ),
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Otw, masih dibikin 😉',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3!
+                                        .copyWith(
+                                          color: Colors.red[400],
+                                        ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         SizedBox(height: 14.0),
                         Container(

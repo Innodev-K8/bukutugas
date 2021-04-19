@@ -108,7 +108,7 @@ class SubjectBottomSheetDialog extends HookWidget {
                         SizedBox(height: 14.0),
                         TextFormField(
                           style: Theme.of(context).textTheme.headline4,
-                          textCapitalization: TextCapitalization.sentences,
+                          textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                             labelText: 'Nama guru/dosen...',
                           ),

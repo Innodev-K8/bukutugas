@@ -24,25 +24,39 @@ class DetailAssignmentScreen extends HookWidget {
                     Container(
                       width: double.infinity,
                       height: 28 + 24 * 2,
-                      padding: const EdgeInsets.all(24.0),
-                      child: Stack(
+                      child: Row(
                         children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(24.0),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Icon(
-                              Icons.chevron_left,
-                              color: Theme.of(context).backgroundColor,
-                              size: 28.0,
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(24.0),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(12.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.chevron_left,
+                                  color: Theme.of(context).backgroundColor,
+                                  size: 28.0,
+                                ),
+                              ),
                             ),
                           ),
-                          Center(
-                            child: Text(
-                              assignment?.title ?? '-',
-                              style: Theme.of(context).textTheme.headline2,
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                assignment?.title ?? '-',
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
                             ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(24.0),
                           ),
                         ],
                       ),

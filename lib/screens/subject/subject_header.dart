@@ -20,25 +20,39 @@ class SubjectHeader extends HookWidget {
             Container(
               width: double.infinity,
               height: 28 + 24 * 2,
-              padding: const EdgeInsets.all(24.0),
-              child: Stack(
+              child: Row(
                 children: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(24.0),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Icon(
-                      Icons.chevron_left,
-                      color: Theme.of(context).primaryColorLight,
-                      size: 28.0,
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(24.0),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.chevron_left,
+                          color: Theme.of(context).primaryColorLight,
+                          size: 28.0,
+                        ),
+                      ),
                     ),
                   ),
-                  Center(
-                    child: Text(
-                      subject?.name ?? '-',
-                      style: Theme.of(context).textTheme.headline3,
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        subject?.name ?? '-',
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
                     ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(24.0),
                   ),
                 ],
               ),
@@ -100,7 +114,7 @@ class SubjectHeader extends HookWidget {
                           readOnly: true,
                           initialSelectedDays: subject?.days,
                           selectedDayColor: subject?.color != null
-                              ? darken(HexColor(subject!.color!), 0.3)
+                              ? darken(HexColor(subject!.color!), 0.2)
                               : darken(Theme.of(context).accentColor),
                         ),
                       ],

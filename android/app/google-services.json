@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "904111185353",
+    "project_id": "buku-tugas",
+    "storage_bucket": "buku-tugas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904111185353:android:c403b716130776f1a7dc18",
+        "android_client_info": {
+          "package_name": "id.innodev.bukutugas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904111185353-qs75h0jrlgavsj22p0ev7jc7hca1gl93.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.innodev.bukutugas",
+            "certificate_hash": "193a4bdc5b6f5f790a8625d36c1344714b2da688"
+          }
+        },
+        {
+          "client_id": "904111185353-9a5kis18nip5u25dga3gtmitge4pg6e2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmPM9vOORi8Jjau1aLjLPyprg2xmZ_Obo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904111185353-9a5kis18nip5u25dga3gtmitge4pg6e2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

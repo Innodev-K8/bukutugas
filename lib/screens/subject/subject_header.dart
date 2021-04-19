@@ -54,7 +54,7 @@ class SubjectHeader extends StatelessWidget {
                         ),
                         SizedBox(height: 14.0),
                         ColorSelector(
-                          color: Colors.red,
+                          color: Theme.of(context).backgroundColor,
                           readOnly: true,
                         ),
                       ],
@@ -69,10 +69,13 @@ class SubjectHeader extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 7.0),
                         Text(
                           'Pak Dewa aaaaaaaaaa',
-                          style: Theme.of(context).textTheme.headline3,
+                          style:
+                              Theme.of(context).textTheme.headline3!.copyWith(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 14.0),

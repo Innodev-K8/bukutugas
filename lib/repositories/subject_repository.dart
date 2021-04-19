@@ -1,4 +1,5 @@
 import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/analytic_provider.dart';
 import 'package:bukutugas/providers/firebase_providers.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,6 +46,8 @@ class SubjectRepository extends BaseSubjectRepository {
       final docRef =
           await _firestore.userSubjectsRef(userId).add(subject.toDoc());
 
+      _read(analyticProvider).logSubjectCreate();
+
       return docRef.id;
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
@@ -59,6 +62,8 @@ class SubjectRepository extends BaseSubjectRepository {
           .userSubjectsRef(userId)
           .doc(subject.id)
           .update(subject.toDoc());
+
+      _read(analyticProvider).logSubjectUpdate();
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }
@@ -69,6 +74,8 @@ class SubjectRepository extends BaseSubjectRepository {
       {required String userId, required Subject subject}) async {
     try {
       await _firestore.userSubjectsRef(userId).doc(subject.id).delete();
+
+      _read(analyticProvider).logSubjectDelete();
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }

@@ -1,4 +1,5 @@
 import 'package:bukutugas/models/assignment.dart';
+import 'package:bukutugas/providers/analytic_provider.dart';
 import 'package:bukutugas/providers/firebase_providers.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,6 +58,8 @@ class AssignmentRepository extends BaseAssignmentRepository {
           .userAssignmentsRef(userId, subjectId)
           .add(assignment.toDoc());
 
+      _read(analyticProvider).logAssignmentCreate();
+
       return docRef.id;
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
@@ -73,6 +76,8 @@ class AssignmentRepository extends BaseAssignmentRepository {
           .userAssignmentsRef(userId, subjectId)
           .doc(assignment.id)
           .update(assignment.toDoc());
+
+      _read(analyticProvider).logAssignmentUpdate();
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }
@@ -88,6 +93,8 @@ class AssignmentRepository extends BaseAssignmentRepository {
           .userAssignmentsRef(userId, subjectId)
           .doc(assignment.id)
           .delete();
+
+      _read(analyticProvider).logAssignmentDelete();
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }

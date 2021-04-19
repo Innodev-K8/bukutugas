@@ -1,5 +1,7 @@
+import 'package:bukutugas/providers/analytic_provider.dart';
 import 'package:bukutugas/providers/firebase_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -57,10 +59,12 @@ class AuthRepository implements BaseAuthRepository {
       );
 
       await _read(firebaseAuthProvider).signInWithCredential(credential);
+
+      _read(analyticProvider).logLogin();
     } on FirebaseAuthException catch (error) {
       throw CustomException(message: error.message);
-    } catch (_) {
-      throw CustomException(message: 'Login dibatalkan');
+    } on PlatformException catch (error) {
+      throw CustomException(message: error.message);
     }
   }
 
@@ -69,6 +73,8 @@ class AuthRepository implements BaseAuthRepository {
     try {
       await _read(googleSignInProvider).disconnect();
       await _read(firebaseAuthProvider).signOut();
+
+      _read(analyticProvider).logLogout();
     } on FirebaseAuthException catch (error) {
       throw CustomException(message: error.message);
     }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bukutugas/providers/firebase_providers.dart';
 import 'package:bukutugas/repositories/auth_repository.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,11 @@ final authProvider =
 });
 
 final userProvider = Provider<User?>((ref) {
-  return ref.watch(authProvider).data?.value;
+  final user = ref.watch(authProvider).data?.value;
+
+  ref.read(firebaseAnalyticsProvider).setUserId(user?.uid);
+
+  return user;
 });
 
 final authExceptionProvider = StateProvider<CustomException?>((_) => null);

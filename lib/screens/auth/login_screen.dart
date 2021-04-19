@@ -14,10 +14,13 @@ class LoginScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Image.asset('assets/images/logo.png'),
+            SizedBox(height: 14),
             Text(
               'Buku Tugas',
-              style: Theme.of(context).textTheme.headline6!.copyWith(
-                    fontSize: Theme.of(context).textTheme.headline1!.fontSize,
+              style: Theme.of(context).textTheme.headline3!.copyWith(
+                    // fontSize: Theme.of(context).textTheme.headline1!.fontSize,
+                    fontWeight: FontWeight.normal,
                   ),
             ),
             SizedBox(height: 14),

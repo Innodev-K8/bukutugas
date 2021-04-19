@@ -5,6 +5,8 @@ import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:bukutugas/repositories/assignment_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+enum AssignmentListFilter { all, todo, done }
+
 final assignmentListExceptionProvider =
     StateProvider<CustomException?>((_) => null);
 
@@ -18,6 +20,33 @@ final assignmentListProvider =
 });
 
 final selectedAssignmentProvider = StateProvider<Assignment?>((_) => null);
+
+final assignmentListFilterProvider = StateProvider<AssignmentListFilter>((_) {
+  return AssignmentListFilter.todo;
+});
+
+final filteredAssignmentListProvider = Provider<List<Assignment>>((ref) {
+  final assignmentList = ref.watch(assignmentListProvider);
+  final assignmentListFilter = ref.watch(assignmentListFilterProvider).state;
+
+  return assignmentList.maybeWhen(
+    data: (assignments) {
+      switch (assignmentListFilter) {
+        case AssignmentListFilter.todo:
+          return assignments
+              .where((assignment) => assignment.status == 'todo')
+              .toList();
+        case AssignmentListFilter.done:
+          return assignments
+              .where((assignment) => assignment.status == 'done')
+              .toList();
+        case AssignmentListFilter.all:
+          return assignments;
+      }
+    },
+    orElse: () => [],
+  );
+});
 
 class AssignmentListNotifier
     extends StateNotifier<AsyncValue<List<Assignment>>> {

@@ -78,8 +78,9 @@ class SubjectItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // TODO: show assignment count
                         Text(
-                          '3 Tugas',
+                          '',
                           style: Theme.of(context).textTheme.headline5,
                         ),
                         Text(

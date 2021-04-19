@@ -45,8 +45,7 @@ class HomeSheet extends StatelessWidget {
 
           return subjectsProvider.when(
             data: (subjects) => subjects.isEmpty
-                // TODO: draw arrow on empty
-                ? Text('Tambahkan Subject')
+                ? EmptySubject()
                 : ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     shrinkWrap: true,
@@ -66,6 +65,39 @@ class HomeSheet extends StatelessWidget {
           );
         }),
       ],
+    );
+  }
+}
+
+class EmptySubject extends StatelessWidget {
+  const EmptySubject({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/empty_subject.png',
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Text(
+                'Klik tombol di bawah buat nambah mapel',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

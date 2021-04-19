@@ -1,4 +1,4 @@
-import 'package:bukutugas/controllers/auth_controller.dart';
+import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,9 +25,7 @@ class LoginScreen extends StatelessWidget {
               Buttons.Google,
               // text: "Masuk dengan akun Google",
               onPressed: () {
-                context
-                    .read(authControllerProvider.notifier)
-                    .signInWithGoogle();
+                context.read(authProvider.notifier).signInWithGoogle();
               },
             ),
           ],

@@ -1,10 +1,17 @@
+import 'package:bukutugas/helpers/helpers.dart';
+import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bukutugas/widgets/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SubjectHeader extends StatelessWidget {
+class SubjectHeader extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final Subject? subject = useProvider(selectedSubjectProvider).state;
+
     return Container(
       width: double.infinity,
       child: SafeArea(
@@ -29,7 +36,7 @@ class SubjectHeader extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      'Bahasa Indonesia',
+                      subject?.name ?? '-',
                       style: Theme.of(context).textTheme.headline3,
                     ),
                   ),
@@ -49,12 +56,14 @@ class SubjectHeader extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         EmojiSelector(
-                          emoji: '📚',
+                          emoji: subject?.emoji ?? '❔',
                           readOnly: true,
                         ),
                         SizedBox(height: 14.0),
                         ColorSelector(
-                          color: Theme.of(context).backgroundColor,
+                          color: subject?.color != null
+                              ? HexColor(subject!.color!)
+                              : Theme.of(context).backgroundColor,
                           readOnly: true,
                         ),
                       ],
@@ -65,12 +74,12 @@ class SubjectHeader extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Bahasa Indonesia aaaaaaaaaa',
+                          subject?.name ?? '-',
                           style: Theme.of(context).textTheme.headline1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          'Pak Dewa aaaaaaaaaa',
+                          subject?.teacher ?? '-',
                           style:
                               Theme.of(context).textTheme.headline3!.copyWith(
                                     fontSize: 12.0,
@@ -89,6 +98,7 @@ class SubjectHeader extends StatelessWidget {
                         SizedBox(height: 8.0),
                         DaySelectorFormField(
                           readOnly: true,
+                          initialSelectedDays: subject?.days,
                         ),
                       ],
                     ),

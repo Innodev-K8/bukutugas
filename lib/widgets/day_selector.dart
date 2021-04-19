@@ -1,3 +1,4 @@
+import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,10 +9,11 @@ class DaySelectorFormField extends FormField<List<int>> {
     FormFieldValidator<List<int>>? validator,
     AutovalidateMode? autovalidateMode,
     bool readOnly = false,
+    List<int>? initialSelectedDays,
   }) : super(
           onSaved: onSaved,
           validator: validator,
-          initialValue: [],
+          initialValue: initialSelectedDays,
           autovalidateMode: autovalidateMode,
           builder: (FormFieldState<List<int>> state) {
             return Column(
@@ -20,6 +22,7 @@ class DaySelectorFormField extends FormField<List<int>> {
                   onChange: (selectedDays) {
                     state.didChange(selectedDays);
                   },
+                  initialSelectedDays: initialSelectedDays,
                   readOnly: readOnly,
                 ),
                 state.hasError
@@ -34,8 +37,13 @@ class DaySelectorFormField extends FormField<List<int>> {
 class DaySelector extends HookWidget {
   final void Function(List<int> selectedDays) onChange;
   final bool readOnly;
+  final List<int>? initialSelectedDays;
 
-  DaySelector({required this.onChange, this.readOnly = false});
+  DaySelector({
+    required this.onChange,
+    this.readOnly = false,
+    this.initialSelectedDays,
+  });
 
   final days = {
     1: 'S',
@@ -49,7 +57,7 @@ class DaySelector extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedDay = useState<List<int>>([]);
+    final selectedDay = useState<List<int>>(initialSelectedDays ?? []);
 
     return Container(
       width: double.infinity,
@@ -108,7 +116,7 @@ class DaySelectorItem extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: isSelected
-              ? Theme.of(context).accentColor
+              ? darken(Theme.of(context).accentColor)
               : Theme.of(context).primaryColorLight,
         ),
         alignment: Alignment.center,

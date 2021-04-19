@@ -1,6 +1,8 @@
+import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bukutugas/widgets/widgets.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeSheet extends StatelessWidget {
   const HomeSheet({
@@ -38,15 +40,31 @@ class HomeSheet extends StatelessWidget {
             style: Theme.of(context).textTheme.headline2,
           ),
         ),
-        ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: 10,
-          scrollDirection: Axis.vertical,
-          separatorBuilder: (context, index) => SizedBox(height: 14.0),
-          itemBuilder: (context, index) => SubjectItem(),
-        ),
+        Consumer(builder: (context, watch, child) {
+          final subjectsProvider = watch(subjectListProvider);
+
+          return subjectsProvider.when(
+            data: (subjects) => subjects.isEmpty
+                // TODO: draw arrow on empty
+                ? Text('Tambahkan Subject')
+                : ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: subjects.length,
+                    scrollDirection: Axis.vertical,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(height: 14.0),
+                    itemBuilder: (context, index) => SubjectItem(
+                      subject: subjects[index],
+                    ),
+                  ),
+            error: (e, st) => Text(e.toString()),
+            loading: () => Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }),
       ],
     );
   }

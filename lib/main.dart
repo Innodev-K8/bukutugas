@@ -1,4 +1,4 @@
-import 'package:bukutugas/controllers/auth_controller.dart';
+import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:bukutugas/screens/screens.dart';
 
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
 class AppWrapper extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final user = useProvider(authControllerProvider);
+    final auth = useProvider(authProvider);
 
     return ProviderListener(
       provider: authExceptionProvider,
@@ -46,36 +46,17 @@ class AppWrapper extends HookWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                error.state!.message ??
-                    'Whoops... something unexpected happening',
+                error.state!.message ?? 'Whoops... terjadi kesalahan',
               ),
             ),
           );
         }
       },
-      child: user.when(
+      child: auth.when(
         data: (user) => user == null ? LoginScreen() : HomeScreen(),
         loading: () => Splash(),
         error: (_, __) => LoginScreen(),
       ),
     );
-
-    // if (user == null) {
-    //   return LoginScreen();
-    // } else {
-    //   return HomeScreen();
-    // }
-
-    // return ProviderListener(
-    //   provider: authControllerProvider,
-    //   onChange: (BuildContext context, User? user) {
-    //     // if (user == null) {
-    //     //   Navigator.of(context).pushReplacementNamed('/auth/login');
-    //     // } else {
-    //     //   Navigator.of(context).pushReplacementNamed('/home');
-    //     // }
-    //   },
-    //   child: Splash(),
-    // );
   }
 }

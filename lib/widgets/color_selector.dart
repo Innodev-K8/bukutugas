@@ -41,9 +41,7 @@ class _ColorSelectorState extends State<ColorSelector> {
             child: AspectRatio(
               aspectRatio: 1.0,
               child: DottedBorder(
-                color: widget.readOnly
-                    ? darken(Theme.of(context).backgroundColor)
-                    : Colors.transparent,
+                color: widget.readOnly ? darken(_color) : Colors.transparent,
                 strokeWidth: 2,
                 radius: AppTheme.rounded.topLeft,
                 borderType: BorderType.RRect,

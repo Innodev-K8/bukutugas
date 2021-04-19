@@ -1,9 +1,15 @@
+import 'package:bukutugas/helpers/helpers.dart';
+import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/screens/subject/subject_sheet.dart';
+import 'package:bukutugas/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import './subject_header.dart';
 
-class SubjectScreen extends StatelessWidget {
+class SubjectScreen extends HookWidget {
   final _headerHeight = 280.0;
 
   @override
@@ -11,8 +17,12 @@ class SubjectScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final bodySizeFactor = 1 - (_headerHeight / size.height);
 
+    final Subject? subject = useProvider(selectedSubjectProvider).state;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: subject?.color != null
+          ? HexColor(subject!.color!)
+          : Theme.of(context).backgroundColor,
       body: Stack(
         children: [
           Container(
@@ -69,7 +79,7 @@ class SubjectScreen extends StatelessWidget {
         },
         elevation: 6,
         child: const Icon(Icons.edit),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: darken(AppTheme.green),
       ),
     );
   }

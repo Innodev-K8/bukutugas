@@ -5,23 +5,23 @@ import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final authControllerProvider =
-    StateNotifierProvider<AuthController, AsyncValue<User?>>((ref) {
-  return AuthController(ref.read);
+final authProvider =
+    StateNotifierProvider<AuthNotifier, AsyncValue<User?>>((ref) {
+  return AuthNotifier(ref.read);
 });
 
 final userProvider = Provider<User?>((ref) {
-  return ref.watch(authControllerProvider).data?.value;
+  return ref.watch(authProvider).data?.value;
 });
 
 final authExceptionProvider = StateProvider<CustomException?>((_) => null);
 
-class AuthController extends StateNotifier<AsyncValue<User?>> {
+class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   final Reader _read;
 
   StreamSubscription<User?>? _authStateChangesSubscription;
 
-  AuthController(this._read)
+  AuthNotifier(this._read)
       : super(AsyncValue.data(_read(authRepositoryProvider).getCurrentUser())) {
     _authStateChangesSubscription?.cancel();
 

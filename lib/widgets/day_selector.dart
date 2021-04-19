@@ -10,6 +10,7 @@ class DaySelectorFormField extends FormField<List<int>> {
     AutovalidateMode? autovalidateMode,
     bool readOnly = false,
     List<int>? initialSelectedDays,
+    required Color selectedDayColor,
   }) : super(
           onSaved: onSaved,
           validator: validator,
@@ -24,6 +25,7 @@ class DaySelectorFormField extends FormField<List<int>> {
                   },
                   initialSelectedDays: initialSelectedDays,
                   readOnly: readOnly,
+                  selectedDayColor: selectedDayColor,
                 ),
                 state.hasError
                     ? ErrorText(message: state.errorText)
@@ -38,9 +40,11 @@ class DaySelector extends HookWidget {
   final void Function(List<int> selectedDays) onChange;
   final bool readOnly;
   final List<int>? initialSelectedDays;
+  final Color selectedDayColor;
 
   DaySelector({
     required this.onChange,
+    required this.selectedDayColor,
     this.readOnly = false,
     this.initialSelectedDays,
   });
@@ -71,6 +75,7 @@ class DaySelector extends HookWidget {
                 DaySelectorItem(
                   text: code,
                   isSelected: selectedDay.value.contains(key),
+                  selectedColor: selectedDayColor,
                   onTap: () {
                     if (readOnly) return;
 
@@ -98,10 +103,12 @@ class DaySelectorItem extends StatelessWidget {
   final String text;
   final bool isSelected;
   final void Function()? onTap;
+  final Color selectedColor;
 
   const DaySelectorItem({
     Key? key,
     required this.text,
+    required this.selectedColor,
     this.onTap,
     this.isSelected = false,
   }) : super(key: key);
@@ -115,9 +122,8 @@ class DaySelectorItem extends StatelessWidget {
         height: 28.0,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isSelected
-              ? darken(Theme.of(context).accentColor)
-              : Theme.of(context).primaryColorLight,
+          color:
+              isSelected ? selectedColor : Theme.of(context).primaryColorLight,
         ),
         alignment: Alignment.center,
         child: Text(

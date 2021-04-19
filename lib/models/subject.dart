@@ -27,12 +27,15 @@ class Subject {
   }
 
   Subject.fromDoc(DocumentSnapshot doc) {
+    Map<String, dynamic> json = doc.data() ?? {};
+
     id = doc.id;
-    name = doc.get('name');
-    teacher = doc.get('teacher');
-    days = doc.get('days').cast<int>();
-    emoji = doc.get('emoji');
-    color = doc.get('color');
+
+    name = json['name'];
+    teacher = json['teacher'];
+    days = json['days'].cast<int>();
+    emoji = json['emoji'];
+    color = json['color'];
   }
 
   Map<String, dynamic> toDoc() {

@@ -99,6 +99,9 @@ class SubjectHeader extends HookWidget {
                         DaySelectorFormField(
                           readOnly: true,
                           initialSelectedDays: subject?.days,
+                          selectedDayColor: subject?.color != null
+                              ? darken(HexColor(subject!.color!), 0.3)
+                              : darken(Theme.of(context).accentColor),
                         ),
                       ],
                     ),

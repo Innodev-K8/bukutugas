@@ -132,6 +132,8 @@ class SubjectBottomSheetDialog extends HookWidget {
                               return 'Buat hari apa aja nih?';
                             }
                           },
+                          selectedDayColor:
+                              darken(Theme.of(context).accentColor),
                         ),
                       ],
                     ),

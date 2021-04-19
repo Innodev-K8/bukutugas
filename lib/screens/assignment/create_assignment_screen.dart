@@ -1,9 +1,11 @@
 import 'package:bukutugas/helpers/helpers.dart';
+import 'package:bukutugas/providers/assignment/assignment_list_provider.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreateAssignmentScreen extends HookWidget {
   static const HERO_KEY = 'CREATE_ASSIGNMENT';
@@ -62,6 +64,8 @@ class CreateAssignmentScreen extends HookWidget {
                         ),
                         SizedBox(height: 14.0),
                         TextFormField(
+                          style: Theme.of(context).textTheme.headline4,
+                          textCapitalization: TextCapitalization.sentences,
                           decoration:
                               InputDecoration(labelText: 'Tugas Kalkulus...'),
                           validator: (value) {
@@ -78,6 +82,8 @@ class CreateAssignmentScreen extends HookWidget {
                         ),
                         SizedBox(height: 14.0),
                         TextFormField(
+                          style: Theme.of(context).textTheme.headline4,
+                          textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
                             labelText: 'Halaman 3...',
                             alignLabelWithHint: true,
@@ -93,6 +99,7 @@ class CreateAssignmentScreen extends HookWidget {
                         ),
                         SizedBox(height: 14.0),
                         DateTimePicker(
+                          style: Theme.of(context).textTheme.headline4,
                           type: DateTimePickerType.dateTime,
                           initialValue: '',
                           firstDate: DateTime(2000),
@@ -157,11 +164,15 @@ class CreateAssignmentScreen extends HookWidget {
 
                               formKey.currentState!.save();
 
-                              print('VALIDATED');
-                              print(title.value);
-                              print(description.value);
-                              print(deadline.value);
-                              print(attachments.value);
+                              context
+                                  .read(assignmentListProvider.notifier)
+                                  .addAssignment(
+                                    title: title.value,
+                                    description: description.value,
+                                    deadline: deadline.value,
+                                  );
+
+                              Navigator.of(context).pop();
                             },
                             child: Text(
                               'Simpan',

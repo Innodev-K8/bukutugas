@@ -98,6 +98,10 @@ class SubjectItem extends StatelessWidget {
                   width: 36,
                   height: 36,
                   child: PopupMenuButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: AppTheme.rounded,
+                    ),
+                    padding: const EdgeInsets.all(0),
                     child: Icon(
                       Icons.more_vert,
                       color: Theme.of(context).primaryColorLight,
@@ -106,11 +110,25 @@ class SubjectItem extends StatelessWidget {
                       return [
                         PopupMenuItem(
                           value: SubjectItemMenuAction.edit,
-                          child: Text('Edit'),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            leading: Icon(
+                              Icons.edit,
+                              color: Colors.grey,
+                            ),
+                            title: Text('Edit'),
+                          ),
                         ),
                         PopupMenuItem(
                           value: SubjectItemMenuAction.delete,
-                          child: Text('Hapus'),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            leading: Icon(
+                              Icons.delete,
+                              color: Colors.red[300],
+                            ),
+                            title: Text('Hapus'),
+                          ),
                         )
                       ];
                     },
@@ -120,9 +138,14 @@ class SubjectItem extends StatelessWidget {
                           showMaterialModalBottomSheet(
                             context: context,
                             backgroundColor: Colors.transparent,
-                            builder: (context) => SubjectBottomSheetDialog(
-                              isEdit: true,
-                              subject: subject,
+                            builder: (context) => Padding(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              child: SubjectBottomSheetDialog(
+                                isEdit: true,
+                                subject: subject,
+                              ),
                             ),
                           );
                           break;

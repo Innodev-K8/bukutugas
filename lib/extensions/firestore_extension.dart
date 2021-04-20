@@ -5,7 +5,12 @@ extension FirestoreExtension on FirebaseFirestore {
     return this.collection('users').doc(userId).collection('subjects');
   }
 
-  CollectionReference userAssignmentsRef(String userId, String subjectId) {
+  DocumentReference userSubjectRef(String userId, String subjectId) {
+    return this.userSubjectsRef(userId).doc(subjectId);
+  }
+
+  CollectionReference userSubjectAssignmentsRef(
+      String userId, String subjectId) {
     return this
         .userSubjectsRef(userId)
         .doc(subjectId)

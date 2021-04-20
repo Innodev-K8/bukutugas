@@ -26,8 +26,6 @@ class SubjectItem extends HookWidget {
 
     final isOnTap = useState(false);
 
-    print('rerender');
-
     return Container(
       height: containerHeight + 4,
       child: Stack(
@@ -124,10 +122,13 @@ class SubjectItem extends HookWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // TODO: show assignment count
                                   Expanded(
                                     child: Text(
-                                      '',
+                                      (subject.assignmentCount == null ||
+                                              subject.assignmentCount! <= 0
+                                          ? 'Tidak ada tugas'
+                                          : subject.assignmentCount.toString() +
+                                              " tugas belum selesai"),
                                       style:
                                           Theme.of(context).textTheme.headline5,
                                     ),

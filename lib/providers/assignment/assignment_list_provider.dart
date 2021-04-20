@@ -2,7 +2,7 @@ import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
-import 'package:bukutugas/repositories/assignment_repository.dart';
+import 'package:bukutugas/repositories/subject_assignment_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum AssignmentListFilter { all, todo, done }
@@ -34,11 +34,11 @@ final filteredAssignmentListProvider = Provider<List<Assignment>>((ref) {
       switch (assignmentListFilter) {
         case AssignmentListFilter.todo:
           return assignments
-              .where((assignment) => assignment.status == 'todo')
+              .where((assignment) => assignment.status == AssignmentStatus.todo)
               .toList();
         case AssignmentListFilter.done:
           return assignments
-              .where((assignment) => assignment.status == 'done')
+              .where((assignment) => assignment.status == AssignmentStatus.done)
               .toList();
         case AssignmentListFilter.all:
           return assignments;
@@ -63,7 +63,7 @@ class AssignmentListNotifier
     if (isRefreshing) state = AsyncValue.loading();
 
     try {
-      final assignments = await _read(assignmentRepositoryProvider)
+      final assignments = await _read(subjectAssignmentRepositoryProvider)
           .retrieveItems(userId: _userId!, subjectId: _subjectId!);
 
       if (mounted) {
@@ -87,7 +87,7 @@ class AssignmentListNotifier
         attachments: [],
       );
 
-      final assignmentId = await _read(assignmentRepositoryProvider)
+      final assignmentId = await _read(subjectAssignmentRepositoryProvider)
           .createAssignment(
               userId: _userId!, subjectId: _subjectId!, assignment: assignment);
 
@@ -95,6 +95,9 @@ class AssignmentListNotifier
         state =
             AsyncValue.data([...assignments, assignment..id = assignmentId]);
       });
+
+      // update to get new count
+      _read(subjectListProvider.notifier).retrieveItems();
     } on CustomException catch (e) {
       _read(assignmentListExceptionProvider).state = e;
     }
@@ -102,7 +105,7 @@ class AssignmentListNotifier
 
   Future<void> updateAssignment({required Assignment updatedAssignment}) async {
     try {
-      await _read(assignmentRepositoryProvider).updateAssignment(
+      await _read(subjectAssignmentRepositoryProvider).updateAssignment(
           userId: _userId!,
           subjectId: _subjectId!,
           assignment: updatedAssignment);
@@ -123,13 +126,41 @@ class AssignmentListNotifier
 
   Future<void> deleteAssignment({required Assignment assignment}) async {
     try {
-      await _read(assignmentRepositoryProvider).deleteAssignment(
+      await _read(subjectAssignmentRepositoryProvider).deleteAssignment(
           userId: _userId!, subjectId: _subjectId!, assignment: assignment);
 
       state.whenData((assignments) {
         state = AsyncValue.data(assignments
           ..removeWhere((_assignment) => _assignment.id == assignment.id));
       });
+    } on CustomException catch (e) {
+      _read(assignmentListExceptionProvider).state = e;
+    }
+  }
+
+  Future<void> markAssignmentStatusAs(
+      {required Assignment assignment,
+      required AssignmentStatus status}) async {
+    try {
+      await _read(subjectAssignmentRepositoryProvider).markAssignmentStatusAs(
+        userId: _userId!,
+        subjectId: _subjectId!,
+        assignment: assignment,
+        status: status,
+      );
+
+      state.whenData((assignments) {
+        state = AsyncValue.data([
+          for (final assignment in assignments)
+            if (assignment.id == assignment.id)
+              assignment..status = status
+            else
+              assignment
+        ]);
+      });
+
+      // update to get new count
+      _read(subjectListProvider.notifier).retrieveItems();
     } on CustomException catch (e) {
       _read(assignmentListExceptionProvider).state = e;
     }

@@ -134,22 +134,20 @@ class DetailAssignmentScreen extends HookWidget {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        if (assignment == null || assignment.status == 'done')
-                          return;
-
-                        final updatedAssignment = assignment..status = 'done';
+                        if (assignment == null ||
+                            assignment.status == AssignmentStatus.done) return;
 
                         context
                             .read(assignmentListProvider.notifier)
-                            .updateAssignment(
-                              updatedAssignment: updatedAssignment,
-                            );
+                            .markAssignmentStatusAs(
+                                assignment: assignment,
+                                status: AssignmentStatus.done);
 
                         context.read(selectedAssignmentProvider).state =
-                            updatedAssignment;
+                            assignment..status = AssignmentStatus.done;
                       },
                       child: Text(
-                        assignment?.status != 'done'
+                        assignment?.status != AssignmentStatus.done
                             ? 'Selesai'
                             : 'Sudah Selesai',
                         style: Theme.of(context).textTheme.headline4!.copyWith(
@@ -157,9 +155,10 @@ class DetailAssignmentScreen extends HookWidget {
                             ),
                       ),
                       style: TextButton.styleFrom(
-                        backgroundColor: assignment?.status != 'done'
-                            ? Theme.of(context).accentColor
-                            : Theme.of(context).shadowColor,
+                        backgroundColor:
+                            assignment?.status != AssignmentStatus.done
+                                ? Theme.of(context).accentColor
+                                : Theme.of(context).shadowColor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
                           vertical: 14,

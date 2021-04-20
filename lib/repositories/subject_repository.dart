@@ -7,13 +7,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bukutugas/extensions/firestore_extension.dart';
 
 abstract class BaseSubjectRepository {
-  Future<List<Subject>> retrieveItems({required String userId});
-  Future<String> createSubject(
-      {required String userId, required Subject subject});
-  Future<void> updateSubject(
-      {required String userId, required Subject subject});
-  Future<void> deleteSubject(
-      {required String userId, required Subject subject});
+  Future<List<Subject>> retrieveItems({
+    required String userId,
+  });
+
+  Future<String> createSubject({
+    required String userId,
+    required Subject subject,
+  });
+
+  Future<void> updateSubject({
+    required String userId,
+    required Subject subject,
+  });
+
+  Future<void> deleteSubject({
+    required String userId,
+    required Subject subject,
+  });
+
+  Future<void> increaseAssignmentCounter({
+    required String userId,
+    required String subjectId,
+  });
 }
 
 final subjectRepositoryProvider = Provider<SubjectRepository>((ref) {
@@ -73,9 +89,32 @@ class SubjectRepository extends BaseSubjectRepository {
   Future<void> deleteSubject(
       {required String userId, required Subject subject}) async {
     try {
-      await _firestore.userSubjectsRef(userId).doc(subject.id).delete();
+      await _firestore.runTransaction((transaction) async {
+        final subjectAssignmentsSnapshot = await _firestore
+            .userSubjectAssignmentsRef(userId, subject.id!)
+            .get();
+
+        // delete every assignment before deleting the subject itself
+        for (DocumentSnapshot ds in subjectAssignmentsSnapshot.docs) {
+          await ds.reference.delete();
+        }
+
+        await _firestore.userSubjectsRef(userId).doc(subject.id).delete();
+      });
 
       _read(analyticProvider).logSubjectDelete();
+    } on FirebaseException catch (error) {
+      throw CustomException(message: error.message);
+    }
+  }
+
+  @override
+  Future<void> increaseAssignmentCounter(
+      {required String userId, required String subjectId}) async {
+    try {
+      await _firestore
+          .userSubjectRef(userId, subjectId)
+          .update({'assignment_count': FieldValue.increment(1)});
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }

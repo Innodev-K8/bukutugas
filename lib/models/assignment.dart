@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum AssignmentStatus {
+  todo,
+  done,
+}
+
 class Assignment {
   String? id;
   String? title;
   String? description;
   String? deadline;
-  String? status;
+  AssignmentStatus? status;
   List<String>? attachments;
 
   Assignment({
@@ -13,7 +18,7 @@ class Assignment {
     this.title,
     this.description,
     this.deadline,
-    this.status = 'todo',
+    this.status = AssignmentStatus.todo,
     this.attachments,
   });
 
@@ -22,8 +27,17 @@ class Assignment {
     title = json['title'];
     description = json['description'];
     deadline = json['deadline'];
-    status = json['status'];
     attachments = json['attachments'].cast<String>();
+
+    switch (json['status']) {
+      case 'done':
+        status = AssignmentStatus.done;
+        break;
+      case 'todo':
+      default:
+        status = AssignmentStatus.todo;
+        break;
+    }
   }
 
   Assignment.fromDoc(DocumentSnapshot doc) {
@@ -34,8 +48,17 @@ class Assignment {
     title = json['title'];
     description = json['description'];
     deadline = json['deadline'];
-    status = json['status'];
     attachments = json['attachments'].cast<String>();
+
+    switch (json['status']) {
+      case 'done':
+        status = AssignmentStatus.done;
+        break;
+      case 'todo':
+      default:
+        status = AssignmentStatus.todo;
+        break;
+    }
   }
 
   Map<String, dynamic> toDoc() {
@@ -48,8 +71,18 @@ class Assignment {
     data['title'] = this.title;
     data['description'] = this.description;
     data['deadline'] = this.deadline;
-    data['status'] = this.status;
     data['attachments'] = this.attachments;
+
+    switch (this.status) {
+      case AssignmentStatus.done:
+        data['status'] = 'done';
+        break;
+      case AssignmentStatus.todo:
+      default:
+        data['status'] = 'todo';
+        break;
+    }
+
     return data;
   }
 }

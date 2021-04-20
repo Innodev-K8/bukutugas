@@ -63,7 +63,7 @@ class HomeSheet extends StatelessWidget {
                     ),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      // to fix list jumps after transition, set minHeght equal with EmptySubject()
+                      // to fix list jumps after transition, set minHeght equal to EmptySubject()
                       minHeight: MediaQuery.of(context).size.height * 0.4,
                     ),
                     child: child,
@@ -83,7 +83,9 @@ class HomeSheet extends StatelessWidget {
                       removeDuration: animationDuration,
                       itemBuilder: (context, animation, subject, index) {
                         final curvedAnimation = CurvedAnimation(
-                            parent: animation, curve: Curves.bounceOut);
+                          parent: animation,
+                          curve: Curves.bounceOut,
+                        );
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),

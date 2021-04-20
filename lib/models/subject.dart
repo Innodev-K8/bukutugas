@@ -7,6 +7,7 @@ class Subject {
   List<int>? days;
   String? emoji;
   String? color;
+  int? assignmentCount;
 
   Subject({
     this.id,
@@ -15,6 +16,7 @@ class Subject {
     this.days,
     this.emoji,
     this.color,
+    this.assignmentCount = 0,
   });
 
   Subject.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class Subject {
     days = json['days'].cast<int>();
     emoji = json['emoji'];
     color = json['color'];
+    assignmentCount = json['assignment_count'];
   }
 
   Subject.fromDoc(DocumentSnapshot doc) {
@@ -36,6 +39,7 @@ class Subject {
     days = json['days'].cast<int>();
     emoji = json['emoji'];
     color = json['color'];
+    assignmentCount = json['assignment_count'];
   }
 
   Map<String, dynamic> toDoc() {
@@ -50,6 +54,7 @@ class Subject {
     data['days'] = this.days;
     data['emoji'] = this.emoji;
     data['color'] = this.color;
+    data['assignment_count'] = this.assignmentCount;
     return data;
   }
 }

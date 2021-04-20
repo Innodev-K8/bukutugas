@@ -1,8 +1,9 @@
+import 'package:bukutugas/models/subject.dart';
 import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:flutter/material.dart';
-
 import 'package:bukutugas/widgets/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 
 class HomeSheet extends StatelessWidget {
   const HomeSheet({
@@ -11,6 +12,8 @@ class HomeSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final animationDuration = Duration(milliseconds: 1000);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,20 +47,79 @@ class HomeSheet extends StatelessWidget {
           final subjectsProvider = watch(subjectListProvider);
 
           return subjectsProvider.when(
-            data: (subjects) => subjects.isEmpty
-                ? EmptySubject()
-                : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: subjects.length,
-                    scrollDirection: Axis.vertical,
-                    separatorBuilder: (context, index) =>
-                        SizedBox(height: 14.0),
-                    itemBuilder: (context, index) => SubjectItem(
-                      subject: subjects[index],
+            data: (subjects) => AnimatedSwitcher(
+              duration: Duration(milliseconds: 250),
+              transitionBuilder: (child, animation) {
+                final curvedAnimation =
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOut);
+
+                return ScaleTransition(
+                  scale: curvedAnimation
+                    ..drive(
+                      Tween(
+                        begin: 0,
+                        end: 1,
+                      ),
                     ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      // to fix list jumps after transition, set minHeght equal with EmptySubject()
+                      minHeight: MediaQuery.of(context).size.height * 0.4,
+                    ),
+                    child: child,
                   ),
+                );
+              },
+              child: subjects.isEmpty
+                  ? EmptySubject()
+                  : ImplicitlyAnimatedList<Subject>(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      items: subjects,
+                      areItemsTheSame: (a, b) => a.id == b.id,
+                      scrollDirection: Axis.vertical,
+                      insertDuration: animationDuration,
+                      removeDuration: animationDuration,
+                      itemBuilder: (context, animation, subject, index) {
+                        final curvedAnimation = CurvedAnimation(
+                            parent: animation, curve: Curves.bounceOut);
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ScaleTransition(
+                            scale: curvedAnimation
+                              ..drive(
+                                Tween(
+                                  begin: 0,
+                                  end: 1,
+                                ),
+                              ),
+                            child: SubjectItem(
+                              subject: subject,
+                            ),
+                          ),
+                        );
+                      },
+                      removeItemBuilder: (context, animation, removedSubject) {
+                        final curvedAnimation = CurvedAnimation(
+                            parent: animation, curve: Curves.easeInOutBack);
+
+                        return ScaleTransition(
+                          scale: curvedAnimation
+                            ..drive(
+                              Tween(
+                                begin: 0,
+                                end: 1,
+                              ),
+                            ),
+                          child: SubjectItem(
+                            subject: removedSubject,
+                          ),
+                        );
+                      },
+                    ),
+            ),
             error: (e, st) => Text(e.toString()),
             loading: () => Center(
               child: CircularProgressIndicator(),

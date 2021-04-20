@@ -23,21 +23,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cloud_firestore: ^1.0.5
   cupertino_icons: ^1.0.2
   date_time_picker: ^2.0.0
   dotted_border: ^2.0.0
   emoji_picker_flutter: ^1.0.3
+  firebase_analytics: ^8.0.0
+  firebase_auth: ^1.1.0
   firebase_core: ^1.0.3
+  firebase_crashlytics: ^2.0.0
   flutter_colorpicker: ^0.4.0
   flutter_hooks: ^0.16.0
   flutter_signin_button: ^2.0.0
-  hooks_riverpod: ^0.14.0+1
-  modal_bottom_sheet: ^2.0.0
-  firebase_auth: ^1.1.0
-  cloud_firestore: ^1.0.5
   google_sign_in: ^5.0.2
-  firebase_crashlytics: ^2.0.0
-  firebase_analytics: ^8.0.0
+  hooks_riverpod: ^0.14.0+1
+  implicitly_animated_reorderable_list: ^0.4.0
+  modal_bottom_sheet: ^2.0.0
 
 dev_dependencies:
   flutter_test:

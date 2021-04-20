@@ -17,7 +17,7 @@ class CreateAssignmentScreen extends HookWidget {
     final title = useState('');
     final description = useState('');
     final deadline = useState('');
-    final attachments = useState([]);
+    // final attachments = useState([]);
 
     return Scaffold(
         backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,

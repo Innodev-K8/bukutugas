@@ -13,7 +13,14 @@ class HomeScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final bodySizeFactor = 1 - (_headerHeight / size.height);
+    final headerSizeFactor = (_headerHeight / size.height);
+    final bodySizeFactor = 1 - headerSizeFactor;
+
+    // dont forget to change this if we change header height eg. margin & paddings
+    final headerContentSizeFactor = (184 / size.height);
+
+    final sheetLimit =
+        bodySizeFactor + (headerSizeFactor - headerContentSizeFactor);
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -26,7 +33,7 @@ class HomeScreen extends HookWidget {
           DraggableScrollableSheet(
             initialChildSize: bodySizeFactor,
             minChildSize: bodySizeFactor,
-            maxChildSize: bodySizeFactor + (0.12),
+            maxChildSize: sheetLimit,
             builder: (context, scrollController) {
               return AnimatedContainer(
                 duration: Duration(milliseconds: 200),

@@ -1,5 +1,5 @@
 import 'package:bukutugas/helpers/helpers.dart';
-import 'package:bukutugas/providers/assignment/assignment_list_provider.dart';
+import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -24,7 +24,7 @@ class CreateAssignmentScreen extends HookWidget {
         backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,
         body: SafeArea(
           child: ProviderListener(
-            provider: assignmentListExceptionProvider,
+            provider: subjectAssignmentsExceptionProvider,
             onChange: (context, StateController<CustomException?> error) {
               if (error.state != null) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -216,7 +216,7 @@ class CreateAssignmentScreen extends HookWidget {
                                 formKey.currentState!.save();
 
                                 context
-                                    .read(assignmentListProvider.notifier)
+                                    .read(subjectAssignmentsProvider.notifier)
                                     .addAssignment(
                                       title: title.value,
                                       description: description.value,

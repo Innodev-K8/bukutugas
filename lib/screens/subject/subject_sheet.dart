@@ -1,4 +1,4 @@
-import 'package:bukutugas/providers/assignment/assignment_list_provider.dart';
+import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/widgets/assignment_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -7,10 +7,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class SubjectSheet extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final assignmentProvider = useProvider(assignmentListProvider);
+    final assignmentProvider = useProvider(subjectAssignmentsProvider);
     final filteredAssignmentList = useProvider(filteredAssignmentListProvider);
     final assignmentListFilter =
-        useProvider(assignmentListFilterProvider).state;
+        useProvider(subjectAssignmentsFilterProvider).state;
 
     String title;
 
@@ -69,7 +69,7 @@ class SubjectSheet extends HookWidget {
 class AssignmentFilterSelector extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final filterState = useProvider(assignmentListFilterProvider).state;
+    final filterState = useProvider(subjectAssignmentsFilterProvider).state;
 
     return Container(
       child: Wrap(
@@ -79,7 +79,7 @@ class AssignmentFilterSelector extends HookWidget {
             message: "Belum Selesai",
             child: GestureDetector(
               onTap: () {
-                context.read(assignmentListFilterProvider).state =
+                context.read(subjectAssignmentsFilterProvider).state =
                     AssignmentListFilter.todo;
               },
               child: Chip(
@@ -100,7 +100,7 @@ class AssignmentFilterSelector extends HookWidget {
             message: "Selesai",
             child: GestureDetector(
               onTap: () {
-                context.read(assignmentListFilterProvider).state =
+                context.read(subjectAssignmentsFilterProvider).state =
                     AssignmentListFilter.done;
               },
               child: Chip(
@@ -122,7 +122,7 @@ class AssignmentFilterSelector extends HookWidget {
             message: "Semua",
             child: GestureDetector(
               onTap: () {
-                context.read(assignmentListFilterProvider).state =
+                context.read(subjectAssignmentsFilterProvider).state =
                     AssignmentListFilter.all;
               },
               child: Chip(

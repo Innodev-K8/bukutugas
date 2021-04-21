@@ -1,5 +1,5 @@
 import 'package:bukutugas/models/assignment.dart';
-import 'package:bukutugas/providers/assignment/assignment_list_provider.dart';
+import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

@@ -1,4 +1,5 @@
 import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/assignment/all_assignments_provider.dart';
 import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:bukutugas/repositories/subject_repository.dart';
@@ -91,6 +92,8 @@ class SubjectListNotifier extends StateNotifier<AsyncValue<List<Subject>>> {
         state = AsyncValue.data(
             subjects..removeWhere((_subject) => _subject.id == subject.id));
       });
+
+      _read(allAssignmentsProvider.notifier).retrieveItems();
     } on CustomException catch (e) {
       _read(subjectListExceptionProvider).state = e;
     }

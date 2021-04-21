@@ -39,6 +39,7 @@ dependencies:
   hooks_riverpod: ^0.14.0+1
   implicitly_animated_reorderable_list: ^0.4.0
   modal_bottom_sheet: ^2.0.0
+  timeago: ^3.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:bukutugas/models/assignment.dart';
+import 'package:bukutugas/providers/assignment/all_assignments_provider.dart';
 import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
@@ -7,27 +8,28 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum AssignmentListFilter { all, todo, done }
 
-final assignmentListExceptionProvider =
+final subjectAssignmentsExceptionProvider =
     StateProvider<CustomException?>((_) => null);
 
-final assignmentListProvider =
-    StateNotifierProvider<AssignmentListNotifier, AsyncValue<List<Assignment>>>(
-        (ref) {
+final subjectAssignmentsProvider = StateNotifierProvider<
+    SubjectAssignmentsNotifier, AsyncValue<List<Assignment>>>((ref) {
   final user = ref.watch(userProvider);
   final subject = ref.watch(selectedSubjectProvider).state;
 
-  return AssignmentListNotifier(ref.read, user?.uid, subject?.id);
+  return SubjectAssignmentsNotifier(ref.read, user?.uid, subject?.id);
 });
 
 final selectedAssignmentProvider = StateProvider<Assignment?>((_) => null);
 
-final assignmentListFilterProvider = StateProvider<AssignmentListFilter>((_) {
+final subjectAssignmentsFilterProvider =
+    StateProvider<AssignmentListFilter>((_) {
   return AssignmentListFilter.todo;
 });
 
 final filteredAssignmentListProvider = Provider<List<Assignment>>((ref) {
-  final assignmentList = ref.watch(assignmentListProvider);
-  final assignmentListFilter = ref.watch(assignmentListFilterProvider).state;
+  final assignmentList = ref.watch(subjectAssignmentsProvider);
+  final assignmentListFilter =
+      ref.watch(subjectAssignmentsFilterProvider).state;
 
   return assignmentList.maybeWhen(
     data: (assignments) {
@@ -48,13 +50,13 @@ final filteredAssignmentListProvider = Provider<List<Assignment>>((ref) {
   );
 });
 
-class AssignmentListNotifier
+class SubjectAssignmentsNotifier
     extends StateNotifier<AsyncValue<List<Assignment>>> {
   final Reader _read;
   final String? _userId;
   final String? _subjectId;
 
-  AssignmentListNotifier(this._read, this._userId, this._subjectId)
+  SubjectAssignmentsNotifier(this._read, this._userId, this._subjectId)
       : super(AsyncValue.loading()) {
     retrieveItems();
   }
@@ -98,8 +100,9 @@ class AssignmentListNotifier
 
       // update to get new count
       _read(subjectListProvider.notifier).retrieveItems();
+      _read(allAssignmentsProvider.notifier).retrieveItems();
     } on CustomException catch (e) {
-      _read(assignmentListExceptionProvider).state = e;
+      _read(subjectAssignmentsExceptionProvider).state = e;
     }
   }
 
@@ -119,8 +122,10 @@ class AssignmentListNotifier
               assignment
         ]);
       });
+
+      _read(allAssignmentsProvider.notifier).retrieveItems();
     } on CustomException catch (e) {
-      _read(assignmentListExceptionProvider).state = e;
+      _read(subjectAssignmentsExceptionProvider).state = e;
     }
   }
 
@@ -134,7 +139,7 @@ class AssignmentListNotifier
           ..removeWhere((_assignment) => _assignment.id == assignment.id));
       });
     } on CustomException catch (e) {
-      _read(assignmentListExceptionProvider).state = e;
+      _read(subjectAssignmentsExceptionProvider).state = e;
     }
   }
 
@@ -161,8 +166,9 @@ class AssignmentListNotifier
 
       // update to get new count
       _read(subjectListProvider.notifier).retrieveItems();
+      _read(allAssignmentsProvider.notifier).retrieveItems();
     } on CustomException catch (e) {
-      _read(assignmentListExceptionProvider).state = e;
+      _read(subjectAssignmentsExceptionProvider).state = e;
     }
   }
 }

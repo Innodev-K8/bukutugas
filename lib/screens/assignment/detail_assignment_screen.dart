@@ -1,5 +1,5 @@
 import 'package:bukutugas/models/assignment.dart';
-import 'package:bukutugas/providers/assignment/assignment_list_provider.dart';
+import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -115,7 +115,7 @@ class DetailAssignmentScreen extends HookWidget {
                       if (assignment == null) return;
 
                       context
-                          .read(assignmentListProvider.notifier)
+                          .read(subjectAssignmentsProvider.notifier)
                           .deleteAssignment(assignment: assignment);
 
                       Navigator.of(context).pop();
@@ -138,7 +138,7 @@ class DetailAssignmentScreen extends HookWidget {
                             assignment.status == AssignmentStatus.done) return;
 
                         context
-                            .read(assignmentListProvider.notifier)
+                            .read(subjectAssignmentsProvider.notifier)
                             .markAssignmentStatusAs(
                                 assignment: assignment,
                                 status: AssignmentStatus.done);

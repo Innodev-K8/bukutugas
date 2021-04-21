@@ -80,6 +80,9 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
 
         final subjectRef = _firestore.userSubjectRef(userId, subjectId);
 
+        // set the assignment owner to later fetch using collection group
+        assignment.userId = userId;
+
         transaction.set(docRef!, assignment.toDoc());
 
         transaction.update(subjectRef, {

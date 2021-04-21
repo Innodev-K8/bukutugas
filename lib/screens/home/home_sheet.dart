@@ -1,9 +1,13 @@
+import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/assignment/all_assignments_provider.dart';
 import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:bukutugas/widgets/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+
+import 'all_assignment_list.dart';
 
 class HomeSheet extends StatelessWidget {
   const HomeSheet({
@@ -17,30 +21,21 @@ class HomeSheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
-        //   child: Text(
-        //     'Tugas',
-        //     style: Theme.of(context).textTheme.headline2,
-        //   ),
-        // ),
-        // Container(
-        //   height: 157,
-        //   padding: const EdgeInsets.only(bottom: 7.0),
-        //   child: ListView.separated(
-        //     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        //     itemCount: 10,
-        //     scrollDirection: Axis.horizontal,
-        //     separatorBuilder: (context, index) => SizedBox(width: 16.0),
-        //     itemBuilder: (context, index) => SimpleTask(),
-        //   ),
-        // ),
-        SizedBox(height: 4),
+        AllAssignmentList(),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
-          child: Text(
-            'Mapel',
-            style: Theme.of(context).textTheme.headline2,
+          child: Row(
+            children: [
+              Icon(
+                Icons.menu_book_rounded,
+                color: Theme.of(context).textTheme.headline2!.color,
+              ),
+              SizedBox(width: 8),
+              Text(
+                'Mapel',
+                style: Theme.of(context).textTheme.headline2,
+              ),
+            ],
           ),
         ),
         Consumer(builder: (context, watch, child) {

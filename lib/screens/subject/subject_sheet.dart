@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 
 class SubjectSheet extends HookWidget {
-  final animationDuration = Duration(milliseconds: 500);
+  final animationDuration = Duration(milliseconds: 350);
 
   @override
   Widget build(BuildContext context) {
@@ -84,16 +84,19 @@ class SubjectSheet extends HookWidget {
                     final curvedAnimation = CurvedAnimation(
                         parent: animation, curve: Curves.easeInOut);
 
-                    return ScaleTransition(
-                      scale: curvedAnimation
-                        ..drive(
-                          Tween(
-                            begin: 0,
-                            end: 1,
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ScaleTransition(
+                        scale: curvedAnimation
+                          ..drive(
+                            Tween(
+                              begin: 0,
+                              end: 1,
+                            ),
                           ),
+                        child: AssignmentItem(
+                          assignment: removedAssignment,
                         ),
-                      child: AssignmentItem(
-                        assignment: removedAssignment,
                       ),
                     );
                   },

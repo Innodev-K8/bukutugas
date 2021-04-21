@@ -100,16 +100,19 @@ class HomeSheet extends StatelessWidget {
                         final curvedAnimation = CurvedAnimation(
                             parent: animation, curve: Curves.easeInOutBack);
 
-                        return ScaleTransition(
-                          scale: curvedAnimation
-                            ..drive(
-                              Tween(
-                                begin: 0,
-                                end: 1,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ScaleTransition(
+                            scale: curvedAnimation
+                              ..drive(
+                                Tween(
+                                  begin: 0,
+                                  end: 1,
+                                ),
                               ),
+                            child: SubjectItem(
+                              subject: removedSubject,
                             ),
-                          child: SubjectItem(
-                            subject: removedSubject,
                           ),
                         );
                       },

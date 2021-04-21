@@ -76,10 +76,18 @@ class AppTheme {
         fontWeight: FontWeight.w600,
       ),
     ),
+    // can't make it work for now
     // timePickerTheme: ThemeData().timePickerTheme.copyWith(
-    //       backgroundColor: Colors.purple,
     //       hourMinuteColor: Colors.red,
     //       hourMinuteTextColor: Colors.green,
+    //       dayPeriodTextStyle: TextStyle(
+    //         color: Colors.cyanAccent,
+    //         fontSize: 8.0,
+    //         fontWeight: FontWeight.w600,
+    //       ),
+    //       dialHandColor: Colors.yellow,
+    //       dialBackgroundColor: Colors.grey,
+    //       dayPeriodTextColor: Colors.deepOrange,
     //     ),
   );
 }

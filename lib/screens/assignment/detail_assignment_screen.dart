@@ -1,5 +1,6 @@
 import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
+import 'package:bukutugas/styles.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -185,11 +186,83 @@ class DetailAssignmentScreen extends HookWidget {
                     onPressed: () {
                       if (assignment == null) return;
 
-                      context
-                          .read(subjectAssignmentsProvider.notifier)
-                          .deleteAssignment(assignment: assignment);
+                      // handle assignment delete
+                      // handle subject delete
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              'Yakin mau dihapus?',
+                              style: Theme.of(context).textTheme.headline2,
+                            ),
+                            insetPadding: const EdgeInsets.all(24.0),
+                            actionsPadding: const EdgeInsets.only(
+                              bottom: 7.0,
+                              right: 14.0,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: AppTheme.roundedLg,
+                            ),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(
+                                    'Mapel yang sudah dihapus tidak bisa dikembalikan lagi.',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).accentColor,
+                                ),
+                                child: Text(
+                                  'Gajadi ah',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                        color: Colors.white,
+                                      ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.red[400],
+                                ),
+                                child: Text(
+                                  'Yakin',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(
+                                        color: Colors.white,
+                                      ),
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read(subjectAssignmentsProvider.notifier)
+                                      .deleteAssignment(assignment: assignment);
 
-                      Navigator.of(context).pop();
+                                  // close the dialog
+                                  Navigator.of(context).pop();
+
+                                  // exit the screen
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColorLight,

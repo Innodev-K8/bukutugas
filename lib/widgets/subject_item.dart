@@ -201,9 +201,86 @@ class SubjectItem extends HookWidget {
                                   );
                                   break;
                                 case SubjectItemMenuAction.delete:
-                                  context
-                                      .read(subjectListProvider.notifier)
-                                      .deleteSubject(subject: subject);
+
+                                  // handle subject delete
+                                  showDialog<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          'Yakin mau dihapus?',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline2,
+                                        ),
+                                        insetPadding:
+                                            const EdgeInsets.all(24.0),
+                                        actionsPadding: const EdgeInsets.only(
+                                          bottom: 7.0,
+                                          right: 14.0,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: AppTheme.roundedLg,
+                                        ),
+                                        content: SingleChildScrollView(
+                                          child: ListBody(
+                                            children: <Widget>[
+                                              Text(
+                                                'Semua tugas mapel ini juga akan ikut dihapus dan tidak bisa dikembalikan lagi.',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                              backgroundColor:
+                                                  Theme.of(context).accentColor,
+                                            ),
+                                            child: Text(
+                                              'Gajadi ah',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4!
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                              backgroundColor: Colors.red[400],
+                                            ),
+                                            child: Text(
+                                              'Yakin',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4!
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                            onPressed: () {
+                                              context
+                                                  .read(subjectListProvider
+                                                      .notifier)
+                                                  .deleteSubject(
+                                                      subject: subject);
+
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+
                                   break;
                               }
                             },

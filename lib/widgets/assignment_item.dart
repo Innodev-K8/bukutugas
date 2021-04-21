@@ -58,7 +58,7 @@ class AssignmentItem extends HookWidget {
                 },
                 borderRadius: AppTheme.roundedLg,
                 child: Container(
-                  height: 110 - 4,
+                  height: 110,
                   padding: const EdgeInsets.all(14.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

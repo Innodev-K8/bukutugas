@@ -1,10 +1,14 @@
+import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/widgets/assignment_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 
 class SubjectSheet extends HookWidget {
+  final animationDuration = Duration(milliseconds: 500);
+
   @override
   Widget build(BuildContext context) {
     final assignmentProvider = useProvider(subjectAssignmentsProvider);
@@ -45,16 +49,54 @@ class SubjectSheet extends HookWidget {
         assignmentProvider.when(
           data: (assignments) => filteredAssignmentList.isEmpty
               ? EmptyAssignment()
-              : ListView.separated(
+              : ImplicitlyAnimatedList<Assignment>(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: filteredAssignmentList.length,
+                  items: filteredAssignmentList,
+                  areItemsTheSame: (a, b) => a.id == b.id,
                   scrollDirection: Axis.vertical,
-                  separatorBuilder: (context, index) => SizedBox(height: 14.0),
-                  itemBuilder: (context, index) => AssignmentItem(
-                    assignment: filteredAssignmentList[index],
-                  ),
+                  insertDuration: animationDuration,
+                  removeDuration: animationDuration,
+                  itemBuilder: (context, animation, assignment, index) {
+                    final curvedAnimation = CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeInOut,
+                    );
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ScaleTransition(
+                        scale: curvedAnimation
+                          ..drive(
+                            Tween(
+                              begin: 0,
+                              end: 1,
+                            ),
+                          ),
+                        child: AssignmentItem(
+                          assignment: assignment,
+                        ),
+                      ),
+                    );
+                  },
+                  removeItemBuilder: (context, animation, removedAssignment) {
+                    final curvedAnimation = CurvedAnimation(
+                        parent: animation, curve: Curves.easeInOut);
+
+                    return ScaleTransition(
+                      scale: curvedAnimation
+                        ..drive(
+                          Tween(
+                            begin: 0,
+                            end: 1,
+                          ),
+                        ),
+                      child: AssignmentItem(
+                        assignment: removedAssignment,
+                      ),
+                    );
+                  },
                 ),
           error: (e, st) => Text(e.toString()),
           loading: () => Center(

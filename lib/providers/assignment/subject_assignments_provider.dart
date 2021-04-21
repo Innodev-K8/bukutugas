@@ -33,6 +33,19 @@ final filteredAssignmentListProvider = Provider<List<Assignment>>((ref) {
 
   return assignmentList.maybeWhen(
     data: (assignments) {
+      // sort
+      assignments.sort((a, b) {
+        if (a.deadline == null || a.deadline == '') {
+          return 1;
+        } else if (b.deadline == null || b.deadline == '') {
+          return -1;
+        }
+
+        return DateTime.parse(a.deadline!).compareTo(
+          DateTime.parse(b.deadline!),
+        );
+      });
+
       switch (assignmentListFilter) {
         case AssignmentListFilter.todo:
           return assignments

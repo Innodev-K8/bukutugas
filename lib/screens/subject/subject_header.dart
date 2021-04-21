@@ -52,7 +52,8 @@ class SubjectHeader extends HookWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.all(24.0),
+                    // 14 ukuran chevron
+                    padding: const EdgeInsets.all(24.0 + 14.0),
                   ),
                 ],
               ),

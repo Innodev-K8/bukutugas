@@ -58,7 +58,8 @@ class DetailAssignmentScreen extends HookWidget {
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(24.0),
+                            // 14 ukuran chevron
+                            padding: const EdgeInsets.all(24.0 + 14.0),
                           ),
                         ],
                       ),
@@ -85,12 +86,34 @@ class DetailAssignmentScreen extends HookWidget {
                                           .withOpacity(0.8),
                                       size: 22.0,
                                     ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      DateFormat('EEEE, d MMMM y', 'id_ID')
-                                          .format(
-                                        DateTime.parse(assignment.deadline!),
-                                      ),
+                                    SizedBox(width: 8),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          DateFormat('EEEE, d MMMM', 'id_ID')
+                                              .format(
+                                            DateTime.parse(
+                                                assignment.deadline!),
+                                          ),
+                                        ),
+                                        Text(
+                                          DateFormat('H:m', 'id_ID').format(
+                                            DateTime.parse(
+                                                assignment.deadline!),
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline5!
+                                              .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2!
+                                                    .color,
+                                              ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

@@ -18,106 +18,100 @@ class SimpleTask extends HookWidget {
     final isOnTap = useState(false);
 
     return Container(
-      height: 110,
+      height: 110 + 4,
       width: 290,
       child: Stack(
         children: [
+          Positioned.fill(
+            top: 4,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: AppTheme.roundedLg,
+                color: darken(Theme.of(context).primaryColorLight),
+              ),
+            ),
+          ),
           AnimatedPositioned(
             top: isOnTap.value ? 4 : 0,
             left: 0,
             right: 0,
             duration: Duration(milliseconds: 100),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 100),
-              decoration: BoxDecoration(
-                borderRadius: AppTheme.roundedLg,
-                boxShadow: [
-                  if (!isOnTap.value)
-                    BoxShadow(
-                      offset: Offset(0, 4),
-                      spreadRadius: 0,
-                      blurRadius: 0,
-                      color: darken(Theme.of(context).primaryColorLight),
-                    )
-                ],
-              ),
-              child: Material(
-                color: Theme.of(context).primaryColorLight,
-                borderRadius: AppTheme.roundedLg,
-                child: InkWell(
-                  onTapDown: (a) {
-                    isOnTap.value = true;
-                  },
-                  onTapCancel: () {
-                    isOnTap.value = false;
-                  },
-                  onTap: () {
-                    isOnTap.value = false;
+            child: Material(
+              color: Theme.of(context).primaryColorLight,
+              borderRadius: AppTheme.roundedLg,
+              child: InkWell(
+                onTapDown: (a) {
+                  isOnTap.value = true;
+                },
+                onTapCancel: () {
+                  isOnTap.value = false;
+                },
+                onTap: () {
+                  isOnTap.value = false;
 
-                    context.read(selectedAssignmentProvider).state = assignment;
+                  context.read(selectedAssignmentProvider).state = assignment;
 
-                    Navigator.of(context).pushNamed('/assignment/detail');
-                  },
-                  borderRadius: AppTheme.roundedLg,
-                  child: Container(
-                    height: 110 - 4,
-                    padding: const EdgeInsets.all(14.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (assignment.deadline != null &&
-                            assignment.deadline != '')
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                DateTime.parse(assignment.deadline!)
-                                            .difference(DateTime.now())
-                                            .inHours <
-                                        12
-                                    ? DateFormat('H:m', 'id_ID').format(
-                                        DateTime.parse(assignment.deadline!),
-                                      )
-                                    : DateFormat('E, d MMM', 'id_ID').format(
-                                        DateTime.parse(assignment.deadline!),
-                                      ),
-                              ),
-                              Text(
-                                timeago.format(
-                                  DateTime.parse(assignment.deadline!),
-                                  allowFromNow: true,
-                                  locale: 'id',
-                                ),
-                              ),
-                            ],
-                          ),
-                        SizedBox(height: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                assignment.title ?? '-',
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.headline2,
-                              ),
-                              Text(
-                                'ini deskripsi yang sangat panjang sekali broo.......',
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6!
-                                    .copyWith(
-                                      fontWeight: FontWeight.normal,
+                  Navigator.of(context).pushNamed('/assignment/detail');
+                },
+                borderRadius: AppTheme.roundedLg,
+                child: Container(
+                  height: 110 - 4,
+                  padding: const EdgeInsets.all(14.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (assignment.deadline != null &&
+                          assignment.deadline != '')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              DateTime.parse(assignment.deadline!)
+                                          .difference(DateTime.now())
+                                          .inHours <
+                                      12
+                                  ? DateFormat('H:m', 'id_ID').format(
+                                      DateTime.parse(assignment.deadline!),
+                                    )
+                                  : DateFormat('E, d MMM', 'id_ID').format(
+                                      DateTime.parse(assignment.deadline!),
                                     ),
+                            ),
+                            Text(
+                              timeago.format(
+                                DateTime.parse(assignment.deadline!),
+                                allowFromNow: true,
+                                locale: 'id',
                               ),
-                              // Text(assignment.description ?? '-'),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                            ),
+                          ],
+                        ),
+                      SizedBox(height: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              assignment.title ?? '-',
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headline2,
+                            ),
+                            Text(
+                              'ini deskripsi yang sangat panjang sekali broo.......',
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .copyWith(
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
+                            // Text(assignment.description ?? '-'),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),

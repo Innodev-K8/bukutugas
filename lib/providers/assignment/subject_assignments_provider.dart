@@ -156,11 +156,11 @@ class SubjectAssignmentsNotifier
 
       state.whenData((assignments) {
         state = AsyncValue.data([
-          for (final assignment in assignments)
-            if (assignment.id == assignment.id)
+          for (final currentAssignment in assignments)
+            if (assignment.id == currentAssignment.id)
               assignment..status = status
             else
-              assignment
+              currentAssignment
         ]);
       });
 

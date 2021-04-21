@@ -171,15 +171,20 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
         switch (status) {
           case AssignmentStatus.done:
             statusString = 'done';
-            counterAction = -1;
+
+            if (assignment.status == AssignmentStatus.done) {
+              counterAction = 0;
+            } else {
+              counterAction = -1;
+            }
             break;
           case AssignmentStatus.todo:
             statusString = 'todo';
 
-            if (assignment.status == AssignmentStatus.done) {
-              counterAction = 1;
-            } else {
+            if (assignment.status == AssignmentStatus.todo) {
               counterAction = 0;
+            } else {
+              counterAction = 1;
             }
             break;
         }

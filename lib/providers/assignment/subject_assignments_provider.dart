@@ -162,6 +162,10 @@ class SubjectAssignmentsNotifier
         state = AsyncValue.data(assignments
           ..removeWhere((_assignment) => _assignment.id == assignment.id));
       });
+
+      // update to get new count
+      _read(subjectListProvider.notifier).retrieveItems();
+      _read(allAssignmentsProvider.notifier).retrieveItems();
     } on CustomException catch (e) {
       _read(subjectAssignmentsExceptionProvider).state = e;
     }

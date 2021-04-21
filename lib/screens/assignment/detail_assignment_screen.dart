@@ -309,11 +309,11 @@ class DetailAssignmentScreen extends HookWidget {
   TextButton _buildMarkDoneButton(
       Assignment? assignment, BuildContext context) {
     return TextButton(
-      onPressed: () {
+      onPressed: () async {
         if (assignment == null || assignment.status == AssignmentStatus.done)
           return;
 
-        context
+        await context
             .read(subjectAssignmentsProvider.notifier)
             .markAssignmentStatusAs(
                 assignment: assignment, status: AssignmentStatus.done);
@@ -386,11 +386,11 @@ class DetailAssignmentScreen extends HookWidget {
   TextButton _buildMarkTodoButton(
       Assignment? assignment, BuildContext context) {
     return TextButton(
-      onPressed: () {
+      onPressed: () async {
         if (assignment == null || assignment.status == AssignmentStatus.todo)
           return;
 
-        context
+        await context
             .read(subjectAssignmentsProvider.notifier)
             .markAssignmentStatusAs(
                 assignment: assignment, status: AssignmentStatus.todo);

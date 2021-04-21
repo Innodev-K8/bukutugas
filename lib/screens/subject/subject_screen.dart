@@ -117,7 +117,7 @@ class SubjectScreen extends HookWidget {
           Navigator.of(context).pushNamed('/assignment/create');
         },
         elevation: 6,
-        child: const Icon(Icons.edit),
+        child: const Icon(Icons.edit_rounded),
         backgroundColor: darken(AppTheme.green),
       ),
     );

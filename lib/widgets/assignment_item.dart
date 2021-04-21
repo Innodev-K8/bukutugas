@@ -67,10 +67,33 @@ class AssignmentItem extends HookWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              assignment.title ?? '-',
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.headline2,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    assignment.title ?? '-',
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        Theme.of(context).textTheme.headline2,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      assignment.status == AssignmentStatus.done
+                                          ? Icons.fastfood_outlined
+                                          : Icons.ac_unit_rounded,
+                                      color: assignment.status ==
+                                              AssignmentStatus.done
+                                          ? AppTheme.green
+                                          : AppTheme.orange,
+                                      size: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             Text(
                               assignment.description ?? '-',

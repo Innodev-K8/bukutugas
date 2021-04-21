@@ -82,8 +82,10 @@ class HomeScreen extends HookWidget {
             );
           },
           elevation: 6,
-          child: const Icon(Icons.add),
-          backgroundColor: darken(Theme.of(context).primaryColor),
+          child: const Icon(Icons.add_rounded),
+          backgroundColor: darken(
+            Theme.of(context).backgroundColor,
+          ),
         ),
       ),
     );

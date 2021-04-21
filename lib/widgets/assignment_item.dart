@@ -73,7 +73,7 @@ class AssignmentItem extends HookWidget {
                               style: Theme.of(context).textTheme.headline2,
                             ),
                             Text(
-                              'ini deskripsi yang sangat panjang sekali broo.......',
+                              assignment.description ?? '-',
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme

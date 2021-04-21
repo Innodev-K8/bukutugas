@@ -1,10 +1,12 @@
 import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
-import 'package:bukutugas/styles.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:bukutugas/widgets/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:intl/intl.dart';
 
 class DetailAssignmentScreen extends HookWidget {
   @override
@@ -67,22 +69,68 @@ class DetailAssignmentScreen extends HookWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            assignment?.deadline ?? '-',
-                            style:
-                                Theme.of(context).textTheme.headline4!.copyWith(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12,
+                          if (assignment?.deadline != null &&
+                              assignment!.deadline != '')
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.today_outlined,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline2!
+                                          .color!
+                                          .withOpacity(0.8),
+                                      size: 22.0,
                                     ),
-                          ),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      DateFormat('EEEE, d MMMM y', 'id_ID')
+                                          .format(
+                                        DateTime.parse(assignment.deadline!),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Chip(
+                                  backgroundColor:
+                                      Theme.of(context).accentColor,
+                                  label: Text(
+                                    timeago.format(
+                                      DateTime.parse(assignment.deadline!),
+                                      allowFromNow: true,
+                                      locale: 'id',
+                                    ),
+                                    style:
+                                        Theme.of(context).textTheme.headline5,
+                                  ),
+                                ),
+                              ],
+                            ),
                           Text(
                             assignment?.title ?? '-',
                             style:
                                 Theme.of(context).textTheme.headline1!.copyWith(
-                                      color: AppTheme.orange,
+                                      color: Theme.of(context).backgroundColor,
                                     ),
                           ),
                           SizedBox(height: 14),
+                          DottedLine(
+                            direction: Axis.horizontal,
+                            lineLength: double.infinity,
+                            lineThickness: 1.0,
+                            dashLength: 4.0,
+                            dashColor: Theme.of(context)
+                                .backgroundColor
+                                .withOpacity(0.5),
+                            dashRadius: 1,
+                            dashGapLength: 4.0,
+                            dashGapColor: Colors.transparent,
+                            dashGapRadius: 0.0,
+                          ),
+                          SizedBox(height: 24),
                           Text(assignment?.description ?? '-'),
                           SizedBox(height: 14),
                           // TODO: implement attachments
@@ -110,8 +158,8 @@ class DetailAssignmentScreen extends HookWidget {
               width: double.infinity,
               child: Row(
                 children: [
-                  InkWell(
-                    onTap: () {
+                  TextButton(
+                    onPressed: () {
                       if (assignment == null) return;
 
                       context
@@ -120,17 +168,21 @@ class DetailAssignmentScreen extends HookWidget {
 
                       Navigator.of(context).pop();
                     },
-                    child: Container(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColorLight,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 10,
-                      ),
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.red[300],
+                        horizontal: 24,
+                        vertical: 14,
                       ),
                     ),
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.red[300],
+                      size:
+                          Theme.of(context).textTheme.headline4!.fontSize! + 4,
+                    ),
                   ),
+                  SizedBox(width: 8),
                   Expanded(
                     child: TextButton(
                       onPressed: () {

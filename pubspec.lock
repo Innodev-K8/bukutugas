@@ -85,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  dotted_line:
+    dependency: "direct main"
+    description:
+      name: dotted_line
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   emoji_picker_flutter:
     dependency: "direct main"
     description:

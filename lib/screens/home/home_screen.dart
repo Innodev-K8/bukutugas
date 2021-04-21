@@ -2,6 +2,7 @@ import 'package:bukutugas/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:flutter/services.dart';
 
 import 'add_subject.dart';
 import 'home_header.dart';
@@ -22,61 +23,68 @@ class HomeScreen extends HookWidget {
     final sheetLimit =
         bodySizeFactor + (headerSizeFactor - headerContentSizeFactor);
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Stack(
-        children: [
-          Container(
-            height: _headerHeight,
-            child: HomeHeader(),
-          ),
-          DraggableScrollableSheet(
-            initialChildSize: bodySizeFactor,
-            minChildSize: bodySizeFactor,
-            maxChildSize: sheetLimit,
-            builder: (context, scrollController) {
-              return AnimatedContainer(
-                duration: Duration(milliseconds: 200),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).dialogBackgroundColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: HomeSheet(),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: Stack(
+          children: [
+            Container(
+              height: _headerHeight,
+              child: HomeHeader(),
+            ),
+            DraggableScrollableSheet(
+              initialChildSize: bodySizeFactor,
+              minChildSize: bodySizeFactor,
+              maxChildSize: sheetLimit,
+              builder: (context, scrollController) {
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).dialogBackgroundColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
                     ),
                   ),
-                ),
-              );
-            },
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showMaterialModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (context) => Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SubjectBottomSheetDialog(),
-            ),
-          );
-        },
-        elevation: 6,
-        child: const Icon(Icons.add),
-        backgroundColor: darken(Theme.of(context).primaryColor),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: HomeSheet(),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showMaterialModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (context) => Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SubjectBottomSheetDialog(),
+              ),
+            );
+          },
+          elevation: 6,
+          child: const Icon(Icons.add),
+          backgroundColor: darken(Theme.of(context).primaryColor),
+        ),
       ),
     );
   }

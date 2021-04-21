@@ -76,5 +76,10 @@ class AppTheme {
         fontWeight: FontWeight.w600,
       ),
     ),
+    // timePickerTheme: ThemeData().timePickerTheme.copyWith(
+    //       backgroundColor: Colors.purple,
+    //       hourMinuteColor: Colors.red,
+    //       hourMinuteTextColor: Colors.green,
+    //     ),
   );
 }

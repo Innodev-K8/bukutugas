@@ -5,6 +5,7 @@ import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/screens/home/add_subject.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -203,8 +204,11 @@ class SubjectItem extends HookWidget {
                                 case SubjectItemMenuAction.delete:
 
                                   // handle subject delete
-                                  showDialog<void>(
+                                  showAnimatedDialog(
                                     context: context,
+                                    animationType: DialogTransitionType.scale,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: Text(

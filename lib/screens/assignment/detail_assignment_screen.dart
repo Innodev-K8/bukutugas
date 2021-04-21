@@ -280,44 +280,168 @@ class DetailAssignmentScreen extends HookWidget {
                   ),
                   SizedBox(width: 8),
                   Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        if (assignment == null ||
-                            assignment.status == AssignmentStatus.done) return;
-
-                        context
-                            .read(subjectAssignmentsProvider.notifier)
-                            .markAssignmentStatusAs(
-                                assignment: assignment,
-                                status: AssignmentStatus.done);
-
-                        context.read(selectedAssignmentProvider).state =
-                            assignment..status = AssignmentStatus.done;
-                      },
-                      child: Text(
-                        assignment?.status != AssignmentStatus.done
-                            ? 'Selesai'
-                            : 'Sudah Selesai',
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            assignment?.status != AssignmentStatus.done
-                                ? Theme.of(context).accentColor
-                                : Theme.of(context).shadowColor,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 14,
-                        ),
-                      ),
-                    ),
+                    child: assignment?.status != AssignmentStatus.done
+                        ? _buildMarkDoneButton(assignment, context)
+                        : _buildMarkTodoButton(assignment, context),
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  TextButton _buildMarkDoneButton(
+      Assignment? assignment, BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        if (assignment == null || assignment.status == AssignmentStatus.done)
+          return;
+
+        context
+            .read(subjectAssignmentsProvider.notifier)
+            .markAssignmentStatusAs(
+                assignment: assignment, status: AssignmentStatus.done);
+
+        context.read(selectedAssignmentProvider).state = assignment
+          ..status = AssignmentStatus.done;
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Yeay selesai!',
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              insetPadding: const EdgeInsets.all(24.0),
+              actionsPadding: const EdgeInsets.only(
+                bottom: 7.0,
+                right: 14.0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: AppTheme.roundedLg,
+              ),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(
+                      'Selamat ya tugasnya udah selesai 😊',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Theme.of(context).accentColor,
+                  ),
+                  child: Text(
+                    'Yeay!',
+                    style: Theme.of(context).textTheme.headline4!.copyWith(
+                          color: Colors.white,
+                        ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Text(
+        'Selesai',
+        style: Theme.of(context).textTheme.headline4!.copyWith(
+              color: Theme.of(context).primaryColorLight,
+            ),
+      ),
+      style: TextButton.styleFrom(
+        backgroundColor: Theme.of(context).accentColor,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 14,
+        ),
+      ),
+    );
+  }
+
+  TextButton _buildMarkTodoButton(
+      Assignment? assignment, BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        if (assignment == null || assignment.status == AssignmentStatus.todo)
+          return;
+
+        context
+            .read(subjectAssignmentsProvider.notifier)
+            .markAssignmentStatusAs(
+                assignment: assignment, status: AssignmentStatus.todo);
+
+        context.read(selectedAssignmentProvider).state = assignment
+          ..status = AssignmentStatus.todo;
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Eh kenapa nihh',
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              insetPadding: const EdgeInsets.all(24.0),
+              actionsPadding: const EdgeInsets.only(
+                bottom: 7.0,
+                right: 14.0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: AppTheme.roundedLg,
+              ),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(
+                      'Kenapapun itu tetap semangat ngerjainya yaa! 💪',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Theme.of(context).accentColor,
+                  ),
+                  child: Text(
+                    'Semangat!',
+                    style: Theme.of(context).textTheme.headline4!.copyWith(
+                          color: Colors.white,
+                        ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Text(
+        'Eh Belum Selesai..',
+        style: Theme.of(context).textTheme.headline4!.copyWith(
+              color: Theme.of(context).primaryColorLight,
+            ),
+      ),
+      style: TextButton.styleFrom(
+        backgroundColor: Theme.of(context).primaryColor,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 14,
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:bukutugas/styles.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:bukutugas/widgets/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -321,8 +322,12 @@ class DetailAssignmentScreen extends HookWidget {
         context.read(selectedAssignmentProvider).state = assignment
           ..status = AssignmentStatus.done;
 
-        showDialog(
+        showAnimatedDialog(
           context: context,
+          animationType: DialogTransitionType.scale,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.bounceOut,
+          barrierDismissible: true,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
@@ -398,12 +403,16 @@ class DetailAssignmentScreen extends HookWidget {
         context.read(selectedAssignmentProvider).state = assignment
           ..status = AssignmentStatus.todo;
 
-        showDialog(
+        showAnimatedDialog(
           context: context,
+          animationType: DialogTransitionType.scale,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          barrierDismissible: true,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
-                'Eh kenapa nihh',
+                'Kenapa nihh',
                 style: Theme.of(context).textTheme.headline2,
               ),
               insetPadding: const EdgeInsets.all(24.0),

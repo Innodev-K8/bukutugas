@@ -47,8 +47,8 @@ class HomeHeader extends HookWidget {
                 context.read(authProvider.notifier).signOut();
               },
               child: Icon(
-                Icons.exit_to_app,
-                color: Theme.of(context).primaryColorLight,
+                Icons.exit_to_app_rounded,
+                color: Theme.of(context).primaryColorLight.withOpacity(0.5),
               ),
             ),
           )

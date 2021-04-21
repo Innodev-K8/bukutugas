@@ -98,8 +98,9 @@ class SimpleTask extends HookWidget {
                               style: Theme.of(context).textTheme.headline2,
                             ),
                             Text(
-                              'ini deskripsi yang sangat panjang sekali broo.......',
+                              assignment.description ?? '-',
                               overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6!

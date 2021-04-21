@@ -75,6 +75,7 @@ class AssignmentItem extends HookWidget {
                             Text(
                               assignment.description ?? '-',
                               overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6!

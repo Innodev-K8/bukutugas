@@ -325,8 +325,8 @@ class DetailAssignmentScreen extends HookWidget {
         showAnimatedDialog(
           context: context,
           animationType: DialogTransitionType.scale,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.bounceOut,
+          duration: Duration(milliseconds: 1200),
+          curve: Curves.easeInOutBack,
           barrierDismissible: true,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -406,7 +406,7 @@ class DetailAssignmentScreen extends HookWidget {
         showAnimatedDialog(
           context: context,
           animationType: DialogTransitionType.scale,
-          duration: Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 500),
           curve: Curves.easeInOut,
           barrierDismissible: true,
           builder: (BuildContext context) {

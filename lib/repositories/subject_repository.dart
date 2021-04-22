@@ -99,6 +99,23 @@ class SubjectRepository extends BaseSubjectRepository {
           await ds.reference.delete();
         }
 
+        final listResult = await _read(firebaseStorageProvider)
+            .userSubjectRef(userId, subject.id!)
+            .list();
+
+        for (final prefix in listResult.prefixes) {
+          final prefixListResult = await prefix.list();
+
+          for (final fileRef in prefixListResult.items) {
+            await fileRef.delete();
+          }
+        }
+
+        await _read(firebaseStorageProvider)
+            .userSubjectRef(userId, subject.id!)
+            .delete()
+            .onError((error, stackTrace) => null);
+
         await _firestore.userSubjectsRef(userId).doc(subject.id).delete();
       });
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/assignment/all_assignments_provider.dart';
 import 'package:bukutugas/providers/auth/auth_controller.dart';
@@ -7,6 +9,8 @@ import 'package:bukutugas/repositories/subject_assignment_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum AssignmentListFilter { all, todo, done }
+
+final isUploadingAssignmentProvider = StateProvider<bool>((ref) => false);
 
 final subjectAssignmentsExceptionProvider =
     StateProvider<CustomException?>((_) => null);
@@ -104,18 +108,24 @@ class SubjectAssignmentsNotifier
     required String title,
     String description = '',
     String deadline = '',
+    List<File> attachmentFiles = const [],
   }) async {
+    _read(isUploadingAssignmentProvider).state = true;
+
     try {
       final assignment = Assignment(
         title: title,
         description: description,
         deadline: deadline,
-        attachments: [],
       );
 
-      final assignmentId = await _read(subjectAssignmentRepositoryProvider)
-          .createAssignment(
-              userId: _userId!, subjectId: _subjectId!, assignment: assignment);
+      final assignmentId =
+          await _read(subjectAssignmentRepositoryProvider).createAssignment(
+        userId: _userId!,
+        subjectId: _subjectId!,
+        assignment: assignment,
+        attachmentFiles: attachmentFiles,
+      );
 
       state.whenData((assignments) {
         state =
@@ -128,6 +138,8 @@ class SubjectAssignmentsNotifier
     } on CustomException catch (e) {
       _read(subjectAssignmentsExceptionProvider).state = e;
     }
+
+    _read(isUploadingAssignmentProvider).state = false;
   }
 
   Future<void> updateAssignment({required Assignment updatedAssignment}) async {

@@ -167,16 +167,17 @@ class DetailAssignmentScreen extends HookWidget {
                             ),
                             SizedBox(height: 24),
                             Text(assignment?.description ?? '-'),
-                            SizedBox(height: 14),
-                            // TODO: implement attachments
-                            // ignore: dead_code
-                            if (false) ...[
+                            SizedBox(height: 24),
+                            if (assignment?.attachments != null &&
+                                assignment!.attachments!.length > 0) ...[
                               Text(
                                 'Lampiran',
                                 style: Theme.of(context).textTheme.headline2,
                               ),
                               SizedBox(height: 14.0),
-                              AttachmentList(),
+                              AttachmentList(
+                                attachmentsUrl: assignment.attachments!,
+                              ),
                             ]
                           ],
                         ),

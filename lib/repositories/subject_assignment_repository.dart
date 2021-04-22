@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/analytic_provider.dart';
 import 'package:bukutugas/providers/firebase_providers.dart';
@@ -5,6 +7,7 @@ import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bukutugas/extensions/firestore_extension.dart';
+import 'package:path/path.dart';
 
 abstract class BaseSubjectAssignmentRepository {
   Future<List<Assignment>> retrieveItems({
@@ -65,10 +68,12 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
   }
 
   @override
-  Future<String> createAssignment(
-      {required String userId,
-      required Assignment assignment,
-      required String subjectId}) async {
+  Future<String> createAssignment({
+    required String userId,
+    required Assignment assignment,
+    required String subjectId,
+    List<File> attachmentFiles = const [],
+  }) async {
     try {
       DocumentReference? docRef;
 
@@ -78,10 +83,22 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
             .userSubjectAssignmentsRef(userId, subjectId)
             .add({});
 
+        if (docRef?.id == null) return;
+
         final subjectRef = _firestore.userSubjectRef(userId, subjectId);
 
         // set the assignment owner to later fetch using collection group
         assignment.userId = userId;
+        assignment.attachments = [];
+
+        for (final File attachmentFile in attachmentFiles) {
+          final uploadTask = await _read(firebaseStorageProvider)
+              .userSubjectAssignmentRef(userId, subjectId, docRef!.id)
+              .child(basename(attachmentFile.path))
+              .putFile(attachmentFile);
+
+          assignment.attachments?.add(await uploadTask.ref.getDownloadURL());
+        }
 
         transaction.set(docRef!, assignment.toDoc());
 
@@ -136,6 +153,14 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
         // some status that already counted
         if (assignment.status == AssignmentStatus.done) {
           counterAction = 0;
+        }
+
+        final listResult = await _read(firebaseStorageProvider)
+            .userSubjectAssignmentRef(userId, subjectId, assignment.id!)
+            .list();
+
+        for (final fileRef in listResult.items) {
+          await fileRef.delete();
         }
 
         transaction.delete(assignmentRef);

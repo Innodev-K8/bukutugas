@@ -52,7 +52,7 @@ class Assignment {
     title = json['title'];
     description = json['description'];
     deadline = json['deadline'];
-    attachments = json['attachments'].cast<String>();
+    attachments = (json['attachments'] ?? []).cast<String>();
 
     switch (json['status']) {
       case 'done':

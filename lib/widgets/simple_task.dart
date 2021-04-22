@@ -70,7 +70,7 @@ class SimpleTask extends HookWidget {
                                           .difference(DateTime.now())
                                           .inHours <
                                       12
-                                  ? DateFormat('H:m', 'id_ID').format(
+                                  ? DateFormat('HH:mm', 'id_ID').format(
                                       DateTime.parse(assignment.deadline!),
                                     )
                                   : DateFormat('E, d MMM', 'id_ID').format(

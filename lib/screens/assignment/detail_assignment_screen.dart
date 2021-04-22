@@ -109,7 +109,7 @@ class DetailAssignmentScreen extends HookWidget {
                                             ),
                                           ),
                                           Text(
-                                            DateFormat('H:m', 'id_ID').format(
+                                            DateFormat('HH:mm', 'id_ID').format(
                                               DateTime.parse(
                                                   assignment.deadline!),
                                             ),

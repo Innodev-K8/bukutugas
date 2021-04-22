@@ -126,7 +126,8 @@ class CreateAssignmentScreen extends HookWidget {
                               initialValue: '',
                               firstDate: DateTime.now(),
                               lastDate: DateTime(2100),
-                              dateLabelText: 'Date',
+                              dateLabelText: "Tanggal",
+                              timeLabelText: "Jam",
                               initialTime: TimeOfDay(hour: 0, minute: 0),
                               validator: (val) {
                                 if (val != null && val != '') {

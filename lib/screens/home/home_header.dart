@@ -13,31 +13,34 @@ class HomeHeader extends HookWidget {
       width: double.infinity,
       child: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(72.0 / 2),
-                child: CircleAvatar(
-                  radius: 72.0 / 2,
-                  child: Image.network(
-                    user.photoURL ??
-                        'https://cdn2.iconfinder.com/data/icons/avatars-99/62/avatar-370-456322-512.png',
+          Container(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(72.0 / 2),
+                  child: CircleAvatar(
+                    radius: 72.0 / 2,
+                    child: Image.network(
+                      user.photoURL ??
+                          'https://cdn2.iconfinder.com/data/icons/avatars-99/62/avatar-370-456322-512.png',
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                'Hi ' + (user.displayName?.split(' ')[0] ?? 'teman'),
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              SizedBox(height: 24.0),
-              Text(
-                'Mau ngerjain apa nih hari ini?',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ],
+                SizedBox(height: 10.0),
+                Text(
+                  'Hi ' + (user.displayName?.split(' ')[0] ?? 'teman'),
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                SizedBox(height: 24.0),
+                Text(
+                  'Mau ngerjain apa nih hari ini?',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+              ],
+            ),
           ),
           Positioned(
             top: 0,

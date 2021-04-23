@@ -1,5 +1,8 @@
 import 'package:bukutugas/models/assignment.dart';
+import 'package:bukutugas/models/subject.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
+import 'package:bukutugas/providers/subject/subject_list_provider.dart';
+import 'package:bukutugas/screens/assignment/create_assignment_screen.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,7 @@ import 'package:intl/intl.dart';
 class DetailAssignmentScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final Subject? selectedSubject = useProvider(selectedSubjectProvider).state;
     final Assignment? assignment =
         useProvider(selectedAssignmentProvider).state;
 
@@ -66,10 +70,38 @@ class DetailAssignmentScreen extends HookWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              // 14 ukuran chevron
-                              padding: const EdgeInsets.all(24.0 + 14.0),
-                            ),
+                            selectedSubject == null
+                                ? Padding(
+                                    padding: const EdgeInsets.all(24.0 + 12.0),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(24.0),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CreateAssignmentScreen(
+                                              isEdit: true,
+                                              assignment: assignment,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12.0),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.edit_rounded,
+                                          color: Theme.of(context).accentColor,
+                                          size: 22.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),

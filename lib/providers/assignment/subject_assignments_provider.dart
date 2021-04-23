@@ -142,12 +142,22 @@ class SubjectAssignmentsNotifier
     _read(isUploadingAssignmentProvider).state = false;
   }
 
-  Future<void> updateAssignment({required Assignment updatedAssignment}) async {
+  Future<Assignment?> updateAssignment({
+    required Assignment updatedAssignment,
+    List<File>? newAttachments,
+    List<String>? deletedAttachments,
+  }) async {
+    _read(isUploadingAssignmentProvider).state = true;
+
     try {
-      await _read(subjectAssignmentRepositoryProvider).updateAssignment(
-          userId: _userId!,
-          subjectId: _subjectId!,
-          assignment: updatedAssignment);
+      updatedAssignment =
+          await _read(subjectAssignmentRepositoryProvider).updateAssignment(
+        userId: _userId!,
+        subjectId: _subjectId!,
+        assignment: updatedAssignment,
+        newAttachments: newAttachments ?? [],
+        deletedAttachments: deletedAttachments ?? [],
+      );
 
       state.whenData((assignments) {
         state = AsyncValue.data([
@@ -160,9 +170,14 @@ class SubjectAssignmentsNotifier
       });
 
       _read(allAssignmentsProvider.notifier).retrieveItems();
+      _read(isUploadingAssignmentProvider).state = false;
+
+      return updatedAssignment;
     } on CustomException catch (e) {
       _read(subjectAssignmentsExceptionProvider).state = e;
     }
+
+    _read(isUploadingAssignmentProvider).state = false;
   }
 
   Future<void> deleteAssignment({required Assignment assignment}) async {

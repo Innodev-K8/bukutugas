@@ -14,22 +14,43 @@ class AttachmentsPicker extends HookWidget {
   final picker = ImagePicker();
 
   final void Function(List<File>)? onChanges;
+  final void Function(String)? onCurrentAttachmentDeleted;
 
-  AttachmentsPicker({this.onChanges});
+  final List<String>? currentAttachments;
+
+  AttachmentsPicker({
+    this.onChanges,
+    this.onCurrentAttachmentDeleted,
+    this.currentAttachments,
+  });
 
   @override
   Widget build(BuildContext context) {
     final attachments = useState<List<File>>([]);
+    final currentAttached = useState<List<String>>(currentAttachments ?? []);
 
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: [
+        ...currentAttached.value.map(
+          (attachment) => CurrentAttachmentItem(
+            attachment: attachment,
+            onDelete: () {
+              currentAttached.value = currentAttached.value
+                  .where(
+                    (a) => a != attachment,
+                  )
+                  .toList();
+
+              onCurrentAttachmentDeleted?.call(attachment);
+            },
+          ),
+        ),
         ...attachments.value.map(
           (attachment) => AttachmentItem(
             attachment: attachment,
             onDelete: () {
-              print('onDelete');
               attachments.value = attachments.value
                   .where(
                     (a) => a.path != attachment.path,
@@ -178,6 +199,53 @@ class AttachmentItem extends StatelessWidget {
           Container(
             width: 98,
             child: Image.file(attachment),
+          ),
+          Positioned(
+            top: 4,
+            right: 4,
+            child: InkWell(
+              onTap: () {
+                onDelete?.call();
+              },
+              child: Container(
+                padding: const EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).primaryColorLight,
+                ),
+                child: Icon(
+                  Icons.close_rounded,
+                  size: 14,
+                  color: Theme.of(context).backgroundColor,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CurrentAttachmentItem extends StatelessWidget {
+  final String attachment;
+  final Function? onDelete;
+
+  const CurrentAttachmentItem({
+    Key? key,
+    required this.attachment,
+    this.onDelete,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: AppTheme.rounded,
+      child: Stack(
+        children: [
+          Container(
+            width: 98,
+            child: Image.network(attachment),
           ),
           Positioned(
             top: 4,

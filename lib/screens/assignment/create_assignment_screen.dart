@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bukutugas/helpers/helpers.dart';
+import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:bukutugas/screens/assignment/attachments_picker.dart';
@@ -11,7 +12,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreateAssignmentScreen extends HookWidget {
-  static const HERO_KEY = 'CREATE_ASSIGNMENT';
+  final bool isEdit;
+  final Assignment? assignment;
+
+  CreateAssignmentScreen({this.isEdit = false, this.assignment})
+      : assert(
+          isEdit == false || assignment != null,
+          'Assignment is required when is edit',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +28,14 @@ class CreateAssignmentScreen extends HookWidget {
 
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    final title = useState('');
-    final description = useState('');
-    final deadline = useState('');
+    final title = useState<String>(isEdit ? assignment?.title ?? '' : '');
+    final description =
+        useState<String>(isEdit ? assignment?.description ?? '' : '');
+    final deadline = useState<String>(isEdit ? assignment?.deadline ?? '' : '');
     final attachments = useState<List<File>>([]);
+    final currentAttachments =
+        useState<List<String>>(isEdit ? assignment?.attachments ?? [] : []);
+    final deletedAttachments = useState<List<String>>([]);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
@@ -63,7 +75,9 @@ class CreateAssignmentScreen extends HookWidget {
                               width: double.infinity,
                               height: 28 + 24 * 2,
                               padding: const EdgeInsets.all(24.0),
-                              child: Stack(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
                                     borderRadius: BorderRadius.circular(24.0),
@@ -71,17 +85,50 @@ class CreateAssignmentScreen extends HookWidget {
                                       Navigator.of(context).pop();
                                     },
                                     child: Icon(
-                                      Icons.chevron_left,
+                                      isEdit
+                                          ? Icons.close_rounded
+                                          : Icons.chevron_left,
                                       color: Theme.of(context).backgroundColor,
                                       size: 28.0,
                                     ),
                                   ),
-                                  Center(
+                                  Expanded(
                                     child: Text(
-                                      'Tambah Tugas',
+                                      isEdit ? 'Edit Tugas' : 'Tambah Tugas',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
                                       style:
                                           Theme.of(context).textTheme.headline2,
                                     ),
+                                  ),
+                                  InkWell(
+                                    borderRadius: BorderRadius.circular(24.0),
+                                    onTap: () async {
+                                      if (!formKey.currentState!.validate()) {
+                                        return;
+                                      }
+
+                                      formKey.currentState!.save();
+
+                                      await _editAssignment(
+                                        context,
+                                        title,
+                                        description,
+                                        deadline,
+                                        attachments,
+                                        deletedAttachments,
+                                      );
+
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: isEdit
+                                        ? Icon(
+                                            Icons.check_rounded,
+                                            color:
+                                                Theme.of(context).accentColor,
+                                            size: 28.0,
+                                          )
+                                        : SizedBox(width: 28),
                                   ),
                                 ],
                               ),
@@ -108,8 +155,9 @@ class CreateAssignmentScreen extends HookWidget {
                                       decoration: InputDecoration(
                                         labelText: 'Tugas Kalkulus...',
                                       ),
-                                      autofocus: true,
+                                      autofocus: !isEdit,
                                       textInputAction: TextInputAction.next,
+                                      initialValue: title.value,
                                       validator: (value) {
                                         if (value == '') {
                                           return 'Tugas apa nih...';
@@ -134,6 +182,7 @@ class CreateAssignmentScreen extends HookWidget {
                                         labelText: 'Halaman 3...',
                                         alignLabelWithHint: true,
                                       ),
+                                      initialValue: description.value,
                                       minLines: 8,
                                       maxLines: 20,
                                       onSaved: (newValue) =>
@@ -148,7 +197,7 @@ class CreateAssignmentScreen extends HookWidget {
                                     SizedBox(height: 14.0),
                                     DateTimePicker(
                                       type: DateTimePickerType.dateTime,
-                                      initialValue: '',
+                                      initialValue: deadline.value,
                                       firstDate: DateTime.now(),
                                       lastDate: DateTime(2100),
                                       dateLabelText: "Tanggal",
@@ -177,8 +226,17 @@ class CreateAssignmentScreen extends HookWidget {
                                     ),
                                     SizedBox(height: 14.0),
                                     AttachmentsPicker(
+                                      currentAttachments:
+                                          currentAttachments.value,
                                       onChanges: (files) {
                                         attachments.value = files;
+                                      },
+                                      onCurrentAttachmentDeleted:
+                                          (attachmentUrl) {
+                                        deletedAttachments.value = [
+                                          ...deletedAttachments.value,
+                                          attachmentUrl
+                                        ];
                                       },
                                     ),
                                     SizedBox(height: 14.0),
@@ -195,16 +253,22 @@ class CreateAssignmentScreen extends HookWidget {
 
                                           formKey.currentState!.save();
 
-                                          await context
-                                              .read(subjectAssignmentsProvider
-                                                  .notifier)
-                                              .addAssignment(
-                                                title: title.value,
-                                                description: description.value,
-                                                deadline: deadline.value,
-                                                attachmentFiles:
-                                                    attachments.value,
-                                              );
+                                          if (isEdit) {
+                                            await _editAssignment(
+                                                context,
+                                                title,
+                                                description,
+                                                deadline,
+                                                attachments,
+                                                deletedAttachments);
+                                          } else {
+                                            await _createAssignment(
+                                                context,
+                                                title,
+                                                description,
+                                                deadline,
+                                                attachments);
+                                          }
 
                                           Navigator.of(context).pop();
                                         },
@@ -240,5 +304,48 @@ class CreateAssignmentScreen extends HookWidget {
                   ),
                 )),
     );
+  }
+
+  Future _createAssignment(
+      BuildContext context,
+      ValueNotifier<String> title,
+      ValueNotifier<String> description,
+      ValueNotifier<String> deadline,
+      ValueNotifier<List<File>> attachments) async {
+    await context.read(subjectAssignmentsProvider.notifier).addAssignment(
+          title: title.value,
+          description: description.value,
+          deadline: deadline.value,
+          attachmentFiles: attachments.value,
+        );
+  }
+
+  Future _editAssignment(
+      BuildContext context,
+      ValueNotifier<String> title,
+      ValueNotifier<String> description,
+      ValueNotifier<String> deadline,
+      ValueNotifier<List<File>> attachments,
+      ValueNotifier<List<String>> deletedAttachments) async {
+    final updatedAssignment = await context
+        .read(subjectAssignmentsProvider.notifier)
+        .updateAssignment(
+          updatedAssignment: Assignment(
+            // id and current attachments is MUST and should not be edited directly!
+            id: assignment?.id,
+            attachments: assignment?.attachments,
+
+            // use new eddited value
+            title: title.value,
+            description: description.value,
+            deadline: deadline.value,
+          ),
+          newAttachments: attachments.value,
+          deletedAttachments: deletedAttachments.value,
+        );
+
+    if (updatedAssignment != null) {
+      context.read(selectedAssignmentProvider).state = updatedAssignment;
+    }
   }
 }

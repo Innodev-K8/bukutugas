@@ -21,10 +21,12 @@ abstract class BaseSubjectAssignmentRepository {
     required Assignment assignment,
   });
 
-  Future<void> updateAssignment({
+  Future<Assignment> updateAssignment({
     required String userId,
     required String subjectId,
     required Assignment assignment,
+    List<File> newAttachments,
+    List<String> deletedAttachments,
   });
 
   Future<void> markAssignmentStatusAs({
@@ -120,17 +122,41 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
   }
 
   @override
-  Future<void> updateAssignment(
-      {required String userId,
-      required Assignment assignment,
-      required String subjectId}) async {
+  Future<Assignment> updateAssignment({
+    required String userId,
+    required Assignment assignment,
+    required String subjectId,
+    List<File> newAttachments = const [],
+    List<String> deletedAttachments = const [],
+  }) async {
     try {
+      // delete all deleted attachments
+      for (final deletedAttachment in deletedAttachments) {
+        await _read(firebaseStorageProvider)
+            .refFromURL(deletedAttachment)
+            .delete();
+
+        assignment.attachments?.removeWhere((url) => url == deletedAttachment);
+      }
+
+      // upload new attachments
+      for (final File attachmentFile in newAttachments) {
+        final uploadTask = await _read(firebaseStorageProvider)
+            .userSubjectAssignmentRef(userId, subjectId, assignment.id!)
+            .child(basename(attachmentFile.path))
+            .putFile(attachmentFile);
+
+        assignment.attachments?.add(await uploadTask.ref.getDownloadURL());
+      }
+
       await _firestore
           .userSubjectAssignmentsRef(userId, subjectId)
           .doc(assignment.id)
           .update(assignment.toDoc());
 
       _read(analyticProvider).logAssignmentUpdate();
+
+      return assignment;
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }

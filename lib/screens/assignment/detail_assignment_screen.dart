@@ -1,3 +1,4 @@
+import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/models/subject.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
@@ -30,311 +31,326 @@ class DetailAssignmentScreen extends HookWidget {
       child: Scaffold(
         backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,
         body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 28 + 24 * 2,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(24.0),
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(12.0),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.chevron_left,
-                                    color: Theme.of(context).backgroundColor,
-                                    size: 28.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  assignment?.title ?? '-',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.headline2,
-                                ),
-                              ),
-                            ),
-                            selectedSubject == null
-                                ? Padding(
-                                    padding: const EdgeInsets.all(24.0 + 12.0),
-                                  )
-                                : Padding(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              clearFocus(context);
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 28 + 24 * 2,
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Container(
                                     padding: const EdgeInsets.all(12.0),
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(24.0),
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                CreateAssignmentScreen(
-                                              isEdit: true,
-                                              assignment: assignment,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.chevron_left,
+                                      color: Theme.of(context).backgroundColor,
+                                      size: 28.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    assignment?.title ?? '-',
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        Theme.of(context).textTheme.headline2,
+                                  ),
+                                ),
+                              ),
+                              selectedSubject == null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.all(24.0 + 12.0),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: InkWell(
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CreateAssignmentScreen(
+                                                isEdit: true,
+                                                assignment: assignment,
+                                              ),
                                             ),
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12.0),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
                                           ),
-                                        );
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(12.0),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
+                                          child: Icon(
+                                            Icons.edit_rounded,
+                                            color:
+                                                Theme.of(context).accentColor,
+                                            size: 22.0,
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.edit_rounded,
-                                          color: Theme.of(context).accentColor,
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (assignment?.deadline != null &&
+                                  assignment!.deadline != '')
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.today_outlined,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .headline2!
+                                              .color!
+                                              .withOpacity(0.8),
                                           size: 22.0,
                                         ),
-                                      ),
+                                        SizedBox(width: 8),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              DateFormat(
+                                                      'EEEE, d MMMM', 'id_ID')
+                                                  .format(
+                                                DateTime.parse(
+                                                    assignment.deadline!),
+                                              ),
+                                            ),
+                                            Text(
+                                              DateFormat('HH:mm', 'id_ID')
+                                                  .format(
+                                                DateTime.parse(
+                                                    assignment.deadline!),
+                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5!
+                                                  .copyWith(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText2!
+                                                        .color,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (assignment?.deadline != null &&
-                                assignment!.deadline != '')
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.today_outlined,
-                                        color: Theme.of(context)
+                                    Chip(
+                                      backgroundColor:
+                                          Theme.of(context).accentColor,
+                                      label: Text(
+                                        timeago.format(
+                                          DateTime.parse(assignment.deadline!),
+                                          allowFromNow: true,
+                                          locale: 'id',
+                                        ),
+                                        style: Theme.of(context)
                                             .textTheme
-                                            .headline2!
-                                            .color!
-                                            .withOpacity(0.8),
-                                        size: 22.0,
+                                            .headline5,
                                       ),
-                                      SizedBox(width: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            DateFormat('EEEE, d MMMM', 'id_ID')
-                                                .format(
-                                              DateTime.parse(
-                                                  assignment.deadline!),
-                                            ),
-                                          ),
-                                          Text(
-                                            DateFormat('HH:mm', 'id_ID').format(
-                                              DateTime.parse(
-                                                  assignment.deadline!),
-                                            ),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5!
-                                                .copyWith(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText2!
-                                                      .color,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Chip(
-                                    backgroundColor:
-                                        Theme.of(context).accentColor,
-                                    label: Text(
-                                      timeago.format(
-                                        DateTime.parse(assignment.deadline!),
-                                        allowFromNow: true,
-                                        locale: 'id',
-                                      ),
-                                      style:
-                                          Theme.of(context).textTheme.headline5,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            Text(
-                              assignment?.title ?? '-',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline1!
-                                  .copyWith(
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                            ),
-                            SizedBox(height: 14),
-                            DottedLine(
-                              direction: Axis.horizontal,
-                              lineLength: double.infinity,
-                              lineThickness: 1.0,
-                              dashLength: 4.0,
-                              dashColor: Theme.of(context)
-                                  .backgroundColor
-                                  .withOpacity(0.5),
-                              dashRadius: 1,
-                              dashGapLength: 4.0,
-                              dashGapColor: Colors.transparent,
-                              dashGapRadius: 0.0,
-                            ),
-                            SizedBox(height: 24),
-                            Text(assignment?.description ?? '-'),
-                            SizedBox(height: 24),
-                            if (assignment?.attachments != null &&
-                                assignment!.attachments!.length > 0) ...[
-                              Text(
-                                'Lampiran',
-                                style: Theme.of(context).textTheme.headline2,
-                              ),
-                              SizedBox(height: 14.0),
-                              AttachmentList(
-                                attachmentsUrl: assignment.attachments!,
-                              ),
-                            ]
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 14),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 14.0,
-                ),
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        if (assignment == null) return;
-
-                        // handle assignment delete
-                        // handle subject delete
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(
-                                'Yakin mau dihapus?',
-                                style: Theme.of(context).textTheme.headline2,
-                              ),
-                              insetPadding: const EdgeInsets.all(24.0),
-                              actionsPadding: const EdgeInsets.only(
-                                bottom: 7.0,
-                                right: 14.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: AppTheme.roundedLg,
-                              ),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: <Widget>[
-                                    Text(
-                                      'Mapel yang sudah dihapus tidak bisa dikembalikan lagi.',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
                                     ),
                                   ],
                                 ),
+                              SelectableText(
+                                assignment?.title ?? '-',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .copyWith(
+                                      color: Theme.of(context).backgroundColor,
+                                    ),
                               ),
-                              actions: <Widget>[
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).accentColor,
-                                  ),
-                                  child: Text(
-                                    'Gajadi ah',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4!
-                                        .copyWith(
-                                          color: Colors.white,
-                                        ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                              SizedBox(height: 14),
+                              DottedLine(
+                                direction: Axis.horizontal,
+                                lineLength: double.infinity,
+                                lineThickness: 1.0,
+                                dashLength: 4.0,
+                                dashColor: Theme.of(context)
+                                    .backgroundColor
+                                    .withOpacity(0.5),
+                                dashRadius: 1,
+                                dashGapLength: 4.0,
+                                dashGapColor: Colors.transparent,
+                                dashGapRadius: 0.0,
+                              ),
+                              SizedBox(height: 24),
+                              SelectableText(assignment?.description ?? '-'),
+                              SizedBox(height: 24),
+                              if (assignment?.attachments != null &&
+                                  assignment!.attachments!.length > 0) ...[
+                                Text(
+                                  'Lampiran',
+                                  style: Theme.of(context).textTheme.headline2,
                                 ),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Colors.red[400],
-                                  ),
-                                  child: Text(
-                                    'Yakin',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4!
-                                        .copyWith(
-                                          color: Colors.white,
-                                        ),
-                                  ),
-                                  onPressed: () {
-                                    context
-                                        .read(
-                                            subjectAssignmentsProvider.notifier)
-                                        .deleteAssignment(
-                                            assignment: assignment);
-
-                                    // close the dialog
-                                    Navigator.of(context).pop();
-
-                                    // exit the screen
-                                    Navigator.of(context).pop();
-                                  },
+                                SizedBox(height: 14.0),
+                                AttachmentList(
+                                  attachmentsUrl: assignment.attachments!,
                                 ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColorLight,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 14,
+                              ]
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 14),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 14.0,
+                  ),
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          if (assignment == null) return;
+
+                          // handle assignment delete
+                          // handle subject delete
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  'Yakin mau dihapus?',
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                                insetPadding: const EdgeInsets.all(24.0),
+                                actionsPadding: const EdgeInsets.only(
+                                  bottom: 7.0,
+                                  right: 14.0,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: AppTheme.roundedLg,
+                                ),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: <Widget>[
+                                      Text(
+                                        'Mapel yang sudah dihapus tidak bisa dikembalikan lagi.',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Theme.of(context).accentColor,
+                                    ),
+                                    child: Text(
+                                      'Gajadi ah',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4!
+                                          .copyWith(
+                                            color: Colors.white,
+                                          ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red[400],
+                                    ),
+                                    child: Text(
+                                      'Yakin',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4!
+                                          .copyWith(
+                                            color: Colors.white,
+                                          ),
+                                    ),
+                                    onPressed: () {
+                                      context
+                                          .read(subjectAssignmentsProvider
+                                              .notifier)
+                                          .deleteAssignment(
+                                              assignment: assignment);
+
+                                      // close the dialog
+                                      Navigator.of(context).pop();
+
+                                      // exit the screen
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColorLight,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 14,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.red[300],
+                          size:
+                              Theme.of(context).textTheme.headline4!.fontSize! +
+                                  4,
                         ),
                       ),
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.red[300],
-                        size: Theme.of(context).textTheme.headline4!.fontSize! +
-                            4,
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: assignment?.status != AssignmentStatus.done
+                            ? _buildMarkDoneButton(assignment, context)
+                            : _buildMarkTodoButton(assignment, context),
                       ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: assignment?.status != AssignmentStatus.done
-                          ? _buildMarkDoneButton(assignment, context)
-                          : _buildMarkTodoButton(assignment, context),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

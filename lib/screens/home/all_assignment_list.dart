@@ -31,8 +31,7 @@ class AllAssignmentList extends HookWidget {
                 ),
               ),
               Container(
-                height: 117,
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                height: 110,
                 child: assignmentsProvider.when(
                   data: (assignments) => assignments.isEmpty
                       ? Text('kosong')
@@ -52,7 +51,7 @@ class AllAssignmentList extends HookWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 16),
             ],
           );
   }

@@ -21,7 +21,12 @@ class HomeSheet extends StatelessWidget {
       children: [
         AllAssignmentList(),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
+          padding: const EdgeInsets.only(
+            top: 14.0,
+            bottom: 14 - 8,
+            left: 24.0,
+            right: 24.0,
+          ),
           child: Row(
             children: [
               Icon(

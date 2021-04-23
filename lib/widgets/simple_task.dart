@@ -13,17 +13,18 @@ class SimpleTask extends HookWidget {
 
   const SimpleTask({Key? key, required this.assignment}) : super(key: key);
 
+  final _deepSize = 4.0;
+
   @override
   Widget build(BuildContext context) {
     final isOnTap = useState(false);
 
     return Container(
-      height: 110 + 4,
       width: 290,
       child: Stack(
         children: [
           Positioned.fill(
-            top: 4,
+            top: _deepSize,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: AppTheme.roundedLg,
@@ -32,7 +33,7 @@ class SimpleTask extends HookWidget {
             ),
           ),
           AnimatedPositioned(
-            top: isOnTap.value ? 4 : 0,
+            top: isOnTap.value ? _deepSize : 0,
             left: 0,
             right: 0,
             duration: Duration(milliseconds: 100),
@@ -55,7 +56,7 @@ class SimpleTask extends HookWidget {
                 },
                 borderRadius: AppTheme.roundedLg,
                 child: Container(
-                  height: 110 - 4,
+                  height: 110 - _deepSize,
                   padding: const EdgeInsets.all(14.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

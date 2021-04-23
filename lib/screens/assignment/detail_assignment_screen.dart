@@ -182,6 +182,7 @@ class DetailAssignmentScreen extends HookWidget {
                           ],
                         ),
                       ),
+                      SizedBox(height: 14),
                     ],
                   ),
                 ),

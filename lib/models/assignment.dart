@@ -8,6 +8,7 @@ enum AssignmentStatus {
 class Assignment {
   String? id;
   String? userId;
+  String? subjectId;
   String? title;
   String? description;
   String? deadline;
@@ -17,6 +18,7 @@ class Assignment {
   Assignment({
     this.id,
     this.userId,
+    this.subjectId,
     this.title,
     this.description,
     this.deadline,
@@ -27,6 +29,7 @@ class Assignment {
   Assignment.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
+    subjectId = json['subject_id'];
     title = json['title'];
     description = json['description'];
     deadline = json['deadline'];
@@ -49,6 +52,7 @@ class Assignment {
     id = doc.id;
 
     userId = json['user_id'];
+    subjectId = json['subject_id'];
     title = json['title'];
     description = json['description'];
     deadline = json['deadline'];
@@ -73,6 +77,7 @@ class Assignment {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['user_id'] = this.userId;
+    data['subject_id'] = this.subjectId;
     data['title'] = this.title;
     data['description'] = this.description;
     data['deadline'] = this.deadline;

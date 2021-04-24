@@ -22,6 +22,7 @@ class NotificationService {
     'Menampillkan notifikasi tugas.',
     importance: Importance.max,
     priority: Priority.high,
+    styleInformation: BigTextStyleInformation(''),
   );
 
   cancelAllNotifications() {

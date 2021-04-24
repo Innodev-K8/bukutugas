@@ -90,6 +90,8 @@ class SubjectAssignmentsNotifier
   }
 
   Future<void> retrieveItems({bool isRefreshing = false}) async {
+    if (_subjectId == null) return;
+
     if (isRefreshing) state = AsyncValue.loading();
 
     try {
@@ -153,7 +155,7 @@ class SubjectAssignmentsNotifier
       updatedAssignment =
           await _read(subjectAssignmentRepositoryProvider).updateAssignment(
         userId: _userId!,
-        subjectId: _subjectId!,
+        subjectId: updatedAssignment.subjectId ?? _subjectId!,
         assignment: updatedAssignment,
         newAttachments: newAttachments ?? [],
         deletedAttachments: deletedAttachments ?? [],
@@ -183,7 +185,10 @@ class SubjectAssignmentsNotifier
   Future<void> deleteAssignment({required Assignment assignment}) async {
     try {
       await _read(subjectAssignmentRepositoryProvider).deleteAssignment(
-          userId: _userId!, subjectId: _subjectId!, assignment: assignment);
+        userId: _userId!,
+        subjectId: assignment.subjectId ?? _subjectId!,
+        assignment: assignment,
+      );
 
       state.whenData((assignments) {
         state = AsyncValue.data(assignments
@@ -204,7 +209,8 @@ class SubjectAssignmentsNotifier
     try {
       await _read(subjectAssignmentRepositoryProvider).markAssignmentStatusAs(
         userId: _userId!,
-        subjectId: _subjectId!,
+        // just to handle previous version
+        subjectId: assignment.subjectId ?? _subjectId!,
         assignment: assignment,
         status: status,
       );

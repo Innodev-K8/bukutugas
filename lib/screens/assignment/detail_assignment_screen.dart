@@ -18,7 +18,6 @@ import 'package:intl/intl.dart';
 class DetailAssignmentScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final Subject? selectedSubject = useProvider(selectedSubjectProvider).state;
     final Assignment? assignment =
         useProvider(selectedAssignmentProvider).state;
 
@@ -77,41 +76,34 @@ class DetailAssignmentScreen extends HookWidget {
                                   ),
                                 ),
                               ),
-                              selectedSubject == null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.all(24.0 + 12.0),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: InkWell(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0),
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CreateAssignmentScreen(
-                                                isEdit: true,
-                                                assignment: assignment,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12.0),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Icon(
-                                            Icons.edit_rounded,
-                                            color:
-                                                Theme.of(context).accentColor,
-                                            size: 22.0,
-                                          ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CreateAssignmentScreen(
+                                          isEdit: true,
+                                          assignment: assignment,
                                         ),
                                       ),
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
                                     ),
+                                    child: Icon(
+                                      Icons.edit_rounded,
+                                      color: Theme.of(context).accentColor,
+                                      size: 22.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

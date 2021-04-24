@@ -91,6 +91,7 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
 
         // set the assignment owner to later fetch using collection group
         assignment.userId = userId;
+        assignment.subjectId = subjectId;
         assignment.attachments = [];
 
         for (final File attachmentFile in attachmentFiles) {
@@ -142,7 +143,8 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
       // upload new attachments
       for (final File attachmentFile in newAttachments) {
         final uploadTask = await _read(firebaseStorageProvider)
-            .userSubjectAssignmentRef(userId, subjectId, assignment.id!)
+            .userSubjectAssignmentRef(
+                userId, assignment.subjectId ?? subjectId, assignment.id!)
             .child(basename(attachmentFile.path))
             .putFile(attachmentFile);
 
@@ -150,7 +152,7 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
       }
 
       await _firestore
-          .userSubjectAssignmentsRef(userId, subjectId)
+          .userSubjectAssignmentsRef(userId, assignment.subjectId ?? subjectId)
           .doc(assignment.id)
           .update(assignment.toDoc());
 
@@ -170,9 +172,11 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
     try {
       await _firestore.runTransaction((transaction) async {
         final assignmentRef = _firestore
-            .userSubjectAssignmentsRef(userId, subjectId)
+            .userSubjectAssignmentsRef(
+                userId, assignment.subjectId ?? subjectId)
             .doc(assignment.id);
-        final subjectRef = _firestore.userSubjectRef(userId, subjectId);
+        final subjectRef = _firestore.userSubjectRef(
+            userId, assignment.subjectId ?? subjectId);
 
         int counterAction = -1;
 
@@ -182,7 +186,8 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
         }
 
         final listResult = await _read(firebaseStorageProvider)
-            .userSubjectAssignmentRef(userId, subjectId, assignment.id!)
+            .userSubjectAssignmentRef(
+                userId, assignment.subjectId ?? subjectId, assignment.id!)
             .list();
 
         for (final fileRef in listResult.items) {

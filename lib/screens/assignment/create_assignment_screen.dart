@@ -331,8 +331,9 @@ class CreateAssignmentScreen extends HookWidget {
         .read(subjectAssignmentsProvider.notifier)
         .updateAssignment(
           updatedAssignment: Assignment(
-            // id and current attachments is MUST and should not be edited directly!
+            // id, user id and current attachments is MUST and should not be edited directly!
             id: assignment?.id,
+            userId: assignment?.userId,
             attachments: assignment?.attachments,
 
             // use new eddited value

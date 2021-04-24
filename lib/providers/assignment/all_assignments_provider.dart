@@ -1,5 +1,6 @@
 import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/auth/auth_controller.dart';
+import 'package:bukutugas/providers/notification/notification_provider.dart';
 import 'package:bukutugas/repositories/all_assignment_repository.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,6 +14,12 @@ final allAssignmentsProvider =
   final user = ref.watch(userProvider);
 
   return AllAssignmentsNotifier(ref.read, user?.uid);
+});
+
+final allAssignmentsListProvider = StateProvider<List<Assignment>>((ref) {
+  final provider = ref.watch(allAssignmentsProvider);
+
+  return provider.data?.value ?? [];
 });
 
 class AllAssignmentsNotifier
@@ -46,6 +53,8 @@ class AllAssignmentsNotifier
 
       if (mounted) {
         state = AsyncValue.data(assignments);
+
+        _read(notificationProvider).rescheduleAllNotifications();
       }
     } on CustomException catch (e, st) {
       state = AsyncValue.error(e, st);

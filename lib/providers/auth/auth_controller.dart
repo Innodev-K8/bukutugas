@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bukutugas/providers/firebase_providers.dart';
+import 'package:bukutugas/providers/notification/notification_provider.dart';
 import 'package:bukutugas/repositories/auth_repository.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +16,9 @@ final userProvider = Provider<User?>((ref) {
   final user = ref.watch(authProvider).data?.value;
 
   ref.read(firebaseAnalyticsProvider).setUserId(user?.uid);
+
+  if (user?.uid != null)
+    ref.read(firebaseCrashlyticsProvider).setUserIdentifier(user!.uid);
 
   return user;
 });
@@ -60,6 +64,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   void signOut() async {
     try {
       state = AsyncValue.loading();
+
+      _read(notificationProvider).cancelAllNotifications();
 
       await _read(authRepositoryProvider).signOut();
     } on CustomException catch (error) {

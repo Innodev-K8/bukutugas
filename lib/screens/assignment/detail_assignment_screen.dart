@@ -11,9 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:bukutugas/widgets/widgets.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailAssignmentScreen extends HookWidget {
   @override
@@ -203,7 +205,26 @@ class DetailAssignmentScreen extends HookWidget {
                                 dashGapRadius: 0.0,
                               ),
                               SizedBox(height: 24),
-                              SelectableText(assignment?.description ?? '-'),
+                              Linkify(
+                                onOpen: (link) async {
+                                  if (await canLaunch(link.url)) {
+                                    await launch(link.url);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text('Tautan tidak dapat dibuka'),
+                                      ),
+                                    );
+                                  }
+                                },
+                                text: assignment?.description ?? '-',
+                                linkStyle: TextStyle(
+                                  color: AppTheme.green,
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                               SizedBox(height: 24),
                               if (assignment?.attachments != null &&
                                   assignment!.attachments!.length > 0) ...[

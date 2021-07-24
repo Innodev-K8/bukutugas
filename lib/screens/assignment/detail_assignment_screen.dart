@@ -229,7 +229,7 @@ class DetailAssignmentScreen extends HookWidget {
                               if (assignment?.attachments != null &&
                                   assignment!.attachments!.length > 0) ...[
                                 Text(
-                                  'Lampiran',
+                                  'Foto',
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 SizedBox(height: 14.0),

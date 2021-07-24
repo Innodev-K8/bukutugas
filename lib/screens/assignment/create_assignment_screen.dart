@@ -220,7 +220,7 @@ class CreateAssignmentScreen extends HookWidget {
                                     ),
                                     SizedBox(height: 14.0),
                                     Text(
-                                      'Lampiran',
+                                      'Foto',
                                       style:
                                           Theme.of(context).textTheme.headline2,
                                     ),

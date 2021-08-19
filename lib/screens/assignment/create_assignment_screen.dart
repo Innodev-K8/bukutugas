@@ -321,6 +321,7 @@ class CreateAssignmentScreen extends HookWidget {
             userId: assignment?.userId,
             subjectId: assignment?.subjectId,
             attachments: assignment?.attachments,
+            status: assignment?.status,
 
             // use new eddited value
             title: title.value,

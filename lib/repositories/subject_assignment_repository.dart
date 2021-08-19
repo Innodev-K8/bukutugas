@@ -156,7 +156,7 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
       await _firestore
           .userSubjectAssignmentsRef(userId, assignment.subjectId ?? subjectId)
           .doc(assignment.id)
-          .update(assignment.toJson()..remove('id'));
+          .update(assignment.toJson()..remove('id')..remove('status'));
 
       _read(analyticProvider).logAssignmentUpdate();
 

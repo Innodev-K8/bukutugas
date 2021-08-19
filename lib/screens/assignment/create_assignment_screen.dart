@@ -5,6 +5,8 @@ import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:bukutugas/screens/assignment/attachments_picker.dart';
+import 'package:bukutugas/styles.dart';
+import 'package:bukutugas/widgets/dottted_separator.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -141,19 +143,19 @@ class CreateAssignmentScreen extends HookWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Judul',
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
-                                    ),
-                                    SizedBox(height: 14.0),
                                     TextFormField(
-                                      style:
-                                          Theme.of(context).textTheme.headline4,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline1!
+                                          .copyWith(
+                                            color: AppTheme.green,
+                                          ),
                                       textCapitalization:
                                           TextCapitalization.sentences,
                                       decoration: InputDecoration(
-                                        labelText: 'Tugas Kalkulus...',
+                                        labelText: 'Judul',
+                                        fillColor: Colors.transparent,
+                                        contentPadding: const EdgeInsets.only(),
                                       ),
                                       autofocus: !isEdit,
                                       textInputAction: TextInputAction.next,
@@ -166,61 +168,23 @@ class CreateAssignmentScreen extends HookWidget {
                                       onSaved: (newValue) =>
                                           title.value = newValue!,
                                     ),
-                                    SizedBox(height: 14.0),
-                                    Text(
-                                      'Deskripsi',
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
-                                    ),
-                                    SizedBox(height: 14.0),
-                                    TextFormField(
-                                      style:
-                                          Theme.of(context).textTheme.headline4,
-                                      textCapitalization:
-                                          TextCapitalization.sentences,
-                                      decoration: InputDecoration(
-                                        labelText: 'Halaman 3...',
-                                        alignLabelWithHint: true,
-                                      ),
-                                      initialValue: description.value,
-                                      minLines: 8,
-                                      maxLines: 20,
-                                      onSaved: (newValue) =>
-                                          description.value = newValue!,
-                                    ),
-                                    SizedBox(height: 14.0),
-                                    Text(
-                                      'Deadline',
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
-                                    ),
-                                    SizedBox(height: 14.0),
+                                    SizedBox(height: 14),
                                     DateTimePicker(
                                       type: DateTimePickerType.dateTime,
                                       initialValue: deadline.value,
                                       firstDate: DateTime.now(),
                                       lastDate: DateTime(2100),
-                                      dateLabelText: "Tanggal",
+                                      dateLabelText: "Deadline",
                                       timeLabelText: "Jam",
                                       initialTime:
                                           TimeOfDay(hour: 0, minute: 0),
-                                      validator: (val) {
-                                        if (val != null && val != '') {
-                                          if (DateTime.parse(val)
-                                              .isBefore(DateTime.now())) {
-                                            return 'Yah tanggal & jam ini udah lewat...';
-                                          }
-                                        }
-
-                                        return null;
-                                      },
                                       onSaved: (newValue) =>
                                           deadline.value = newValue!,
                                       icon: Icon(Icons.today),
                                     ),
                                     SizedBox(height: 14.0),
                                     Text(
-                                      'Foto',
+                                      'Lampiran Foto',
                                       style:
                                           Theme.of(context).textTheme.headline2,
                                     ),
@@ -238,6 +202,27 @@ class CreateAssignmentScreen extends HookWidget {
                                           attachmentUrl
                                         ];
                                       },
+                                    ),
+                                    SizedBox(height: 14),
+                                    DottedSeparator(),
+                                    SizedBox(height: 24),
+                                    TextFormField(
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      decoration: InputDecoration(
+                                        labelText: 'Penjelasan tugas',
+                                        alignLabelWithHint: true,
+                                        fillColor: Colors.transparent,
+                                        contentPadding: const EdgeInsets.only(),
+                                      ),
+                                      initialValue: description.value,
+                                      minLines:
+                                          MediaQuery.of(context).size.height *
+                                              0.7 ~/
+                                              34,
+                                      maxLines: null,
+                                      onSaved: (newValue) =>
+                                          description.value = newValue!,
                                     ),
                                     SizedBox(height: 14.0),
                                     Container(

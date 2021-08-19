@@ -3,16 +3,16 @@ import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/screens/assignment/create_assignment_screen.dart';
 import 'package:bukutugas/styles.dart';
-import 'package:dotted_line/dotted_line.dart';
+import 'package:bukutugas/widgets/dottted_separator.dart';
+import 'package:bukutugas/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:bukutugas/widgets/widgets.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailAssignmentScreen extends HookWidget {
@@ -189,19 +189,7 @@ class DetailAssignmentScreen extends HookWidget {
                                     ),
                               ),
                               SizedBox(height: 14),
-                              DottedLine(
-                                direction: Axis.horizontal,
-                                lineLength: double.infinity,
-                                lineThickness: 1.0,
-                                dashLength: 4.0,
-                                dashColor: Theme.of(context)
-                                    .backgroundColor
-                                    .withOpacity(0.5),
-                                dashRadius: 1,
-                                dashGapLength: 4.0,
-                                dashGapColor: Colors.transparent,
-                                dashGapRadius: 0.0,
-                              ),
+                              DottedSeparator(),
                               SizedBox(height: 24),
                               SelectableLinkify(
                                 onOpen: (link) async {

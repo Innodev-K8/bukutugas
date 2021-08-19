@@ -1,8 +1,6 @@
 import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/models/assignment.dart';
-import 'package:bukutugas/models/subject.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
-import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/screens/assignment/create_assignment_screen.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:dotted_line/dotted_line.dart';

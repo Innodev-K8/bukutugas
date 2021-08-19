@@ -120,103 +120,33 @@ class NotificationTypeSelector extends HookWidget {
         Wrap(
           spacing: 8,
           children: [
-            GestureDetector(
+            for (final type in NotificationType.values)
+             GestureDetector(
               onTap: () {
-                selected.value = NotificationType.minute30;
+                selected.value = type;
               },
               child: Chip(
-                backgroundColor: selected.value == NotificationType.minute30
+                backgroundColor: selected.value == type
                     ? Theme.of(context).accentColor
                     : Theme.of(context).bottomSheetTheme.backgroundColor,
                 label: Text(
-                  '30 menit',
+                  notificationTypeToString(type),
                   style: Theme.of(context).textTheme.headline5!.copyWith(
-                        color: selected.value == NotificationType.minute30
+                        color: selected.value == type
                             ? Theme.of(context).primaryColorLight
                             : Theme.of(context).backgroundColor,
                       ),
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                selected.value = NotificationType.hour1;
-              },
-              child: Chip(
-                backgroundColor: selected.value == NotificationType.hour1
-                    ? Theme.of(context).accentColor
-                    : Theme.of(context).bottomSheetTheme.backgroundColor,
-                label: Text(
-                  '1 jam',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
-                        color: selected.value == NotificationType.hour1
-                            ? Theme.of(context).primaryColorLight
-                            : Theme.of(context).backgroundColor,
-                      ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                selected.value = NotificationType.hour4;
-              },
-              child: Chip(
-                backgroundColor: selected.value == NotificationType.hour4
-                    ? Theme.of(context).accentColor
-                    : Theme.of(context).bottomSheetTheme.backgroundColor,
-                label: Text(
-                  '4 jam',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
-                        color: selected.value == NotificationType.hour4
-                            ? Theme.of(context).primaryColorLight
-                            : Theme.of(context).backgroundColor,
-                      ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                selected.value = NotificationType.hour12;
-              },
-              child: Chip(
-                backgroundColor: selected.value == NotificationType.hour12
-                    ? Theme.of(context).accentColor
-                    : Theme.of(context).bottomSheetTheme.backgroundColor,
-                label: Text(
-                  '12 jam',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
-                        color: selected.value == NotificationType.hour12
-                            ? Theme.of(context).primaryColorLight
-                            : Theme.of(context).backgroundColor,
-                      ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                selected.value = NotificationType.day1;
-              },
-              child: Chip(
-                backgroundColor: selected.value == NotificationType.day1
-                    ? Theme.of(context).accentColor
-                    : Theme.of(context).bottomSheetTheme.backgroundColor,
-                label: Text(
-                  '1 hari',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
-                        color: selected.value == NotificationType.day1
-                            ? Theme.of(context).primaryColorLight
-                            : Theme.of(context).backgroundColor,
-                      ),
-                ),
-              ),
-            ),
+            
             GestureDetector(
               onTap: () {
                 selected.value = null;
               },
               child: Chip(
                 backgroundColor: selected.value == null
-                    ? Theme.of(context).accentColor
+                    ? Theme.of(context).primaryColor
                     : Theme.of(context).bottomSheetTheme.backgroundColor,
                 label: Text(
                   'Tanpa Notifikasi',

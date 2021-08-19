@@ -114,6 +114,12 @@ class NotificationService {
     tz.TZDateTime scheduleDt = tz.TZDateTime.from(deadline, tz.local);
 
     switch (type) {
+      case NotificationType.atTime:
+        scheduleDt = scheduleDt;
+        break;
+      case NotificationType.minute5:
+        scheduleDt = scheduleDt.subtract(Duration(minutes: 5));
+        break;
       case NotificationType.minute30:
         scheduleDt = scheduleDt.subtract(Duration(minutes: 30));
         break;

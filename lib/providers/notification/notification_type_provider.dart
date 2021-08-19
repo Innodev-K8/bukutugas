@@ -2,10 +2,14 @@ import 'package:bukutugas/providers/shared_preference_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum NotificationType { minute30, hour1, hour4, hour12, day1 }
+enum NotificationType { atTime, minute5, minute30, hour1, hour4, hour12, day1 }
 
 NotificationType? parseNotificationTypeString(String? notificationType) {
   switch (notificationType) {
+    case 'atTime':
+      return NotificationType.atTime;
+    case 'minute5':
+      return NotificationType.minute5;
     case 'minute30':
       return NotificationType.minute30;
     case 'hour1':
@@ -18,6 +22,27 @@ NotificationType? parseNotificationTypeString(String? notificationType) {
       return NotificationType.day1;
     default:
       return null;
+  }
+}
+
+String notificationTypeToString(NotificationType? notificationType) {
+  switch (notificationType) {
+    case NotificationType.atTime:
+      return 'Tepat Waktu';
+    case NotificationType.minute5:
+      return '5 Menit';
+    case NotificationType.minute30:
+      return '30 menit';
+    case NotificationType.hour1:
+      return '1 jam';
+    case NotificationType.hour4:
+      return '4 jam';
+    case NotificationType.hour12:
+      return '12 jam';
+    case NotificationType.day1:
+      return '1 hari';
+    default:
+      return '';
   }
 }
 
@@ -49,20 +74,7 @@ class NotificationTypeService extends ChangeNotifier {
   }
 
   String get typeString {
-    switch (type) {
-      case NotificationType.minute30:
-        return '30 menit';
-      case NotificationType.hour1:
-        return '1 jam';
-      case NotificationType.hour4:
-        return '4 jam';
-      case NotificationType.hour12:
-        return '12 jam';
-      case NotificationType.day1:
-        return '1 hari';
-      default:
-        return '';
-    }
+    return notificationTypeToString(type);
   }
 }
 

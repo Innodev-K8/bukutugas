@@ -205,7 +205,7 @@ class DetailAssignmentScreen extends HookWidget {
                                 dashGapRadius: 0.0,
                               ),
                               SizedBox(height: 24),
-                              Linkify(
+                              SelectableLinkify(
                                 onOpen: (link) async {
                                   if (await canLaunch(link.url)) {
                                     await launch(link.url);

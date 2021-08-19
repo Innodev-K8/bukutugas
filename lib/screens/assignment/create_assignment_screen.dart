@@ -39,6 +39,16 @@ class CreateAssignmentScreen extends HookWidget {
         useState<List<String>>(isEdit ? assignment?.attachments ?? [] : []);
     final deletedAttachments = useState<List<String>>([]);
 
+    Future<void> saveAssignment() async {
+      if (isEdit) {
+        await _editAssignment(context, title, description, deadline,
+            attachments, deletedAttachments);
+      } else {
+        await _createAssignment(
+            context, title, description, deadline, attachments);
+      }
+    }
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -112,25 +122,15 @@ class CreateAssignmentScreen extends HookWidget {
 
                                       formKey.currentState!.save();
 
-                                      await _editAssignment(
-                                        context,
-                                        title,
-                                        description,
-                                        deadline,
-                                        attachments,
-                                        deletedAttachments,
-                                      );
+                                      await saveAssignment();
 
                                       Navigator.of(context).pop();
                                     },
-                                    child: isEdit
-                                        ? Icon(
-                                            Icons.check_rounded,
-                                            color:
-                                                Theme.of(context).accentColor,
-                                            size: 28.0,
-                                          )
-                                        : SizedBox(width: 28),
+                                    child: Icon(
+                                      Icons.check_rounded,
+                                      color: Theme.of(context).accentColor,
+                                      size: 28.0,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -238,22 +238,7 @@ class CreateAssignmentScreen extends HookWidget {
 
                                           formKey.currentState!.save();
 
-                                          if (isEdit) {
-                                            await _editAssignment(
-                                                context,
-                                                title,
-                                                description,
-                                                deadline,
-                                                attachments,
-                                                deletedAttachments);
-                                          } else {
-                                            await _createAssignment(
-                                                context,
-                                                title,
-                                                description,
-                                                deadline,
-                                                attachments);
-                                          }
+                                          await saveAssignment();
 
                                           Navigator.of(context).pop();
                                         },

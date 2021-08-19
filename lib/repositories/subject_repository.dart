@@ -49,7 +49,7 @@ class SubjectRepository extends BaseSubjectRepository {
     try {
       final snapshot = await _firestore.userSubjectsRef(userId).get();
 
-      return snapshot.docs.map((doc) => Subject.fromDoc(doc)).toList();
+      return snapshot.docs.map((doc) => doc.data()).toList();
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }
@@ -60,7 +60,7 @@ class SubjectRepository extends BaseSubjectRepository {
       {required String userId, required Subject subject}) async {
     try {
       final docRef =
-          await _firestore.userSubjectsRef(userId).add(subject.toDoc());
+          await _firestore.userSubjectsRef(userId).add(subject);
 
       _read(analyticProvider).logSubjectCreate();
 
@@ -77,7 +77,7 @@ class SubjectRepository extends BaseSubjectRepository {
       await _firestore
           .userSubjectsRef(userId)
           .doc(subject.id)
-          .update(subject.toDoc());
+          .update(subject.toJson()..remove('id'));
 
       _read(analyticProvider).logSubjectUpdate();
     } on FirebaseException catch (error) {

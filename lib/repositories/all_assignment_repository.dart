@@ -4,6 +4,8 @@ import 'package:bukutugas/repositories/custom_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../extensions/firestore_extension.dart';
+
 abstract class BaseAssignmentRepository {
   Future<List<Assignment>> retrieveItems({required String userId});
 
@@ -28,19 +30,9 @@ class AssignmentRepository extends BaseAssignmentRepository {
   @override
   Future<List<Assignment>> retrieveItems({required String userId}) async {
     try {
-      final snapshot = await _firestore
-          .collectionGroup('assignments')
-          .where(
-            'user_id',
-            isEqualTo: userId,
-          )
-          .where(
-            'status',
-            isEqualTo: 'todo',
-          )
-          .get();
+      final snapshot = await _firestore.userAssignmentsRef(userId).get();
 
-      return snapshot.docs.map((doc) => Assignment.fromDoc(doc)).toList();
+      return snapshot.docs.map((doc) => doc.data()).toList();
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }
@@ -56,24 +48,14 @@ class AssignmentRepository extends BaseAssignmentRepository {
       _read(firebaseCrashlyticsProvider)
           .setCustomKey('assignmentId', assignmentId);
 
-      final snapshot = await _firestore
-          .collectionGroup('assignments')
-          .where(
-            'user_id',
-            isEqualTo: userId,
-          )
-          .where(
-            'status',
-            isEqualTo: 'todo',
-          )
-          .get();
+      final snapshot = await _firestore.userAssignmentsRef(userId).get();
 
-      final QueryDocumentSnapshot? result = snapshot.docs
+      final QueryDocumentSnapshot<Assignment>? result = snapshot.docs
           .firstWhere((doc) => doc.id == assignmentId, orElse: null);
 
       if (result == null) return null;
 
-      return Assignment.fromDoc(result);
+      return result.data();
     } on FirebaseException catch (error, st) {
       _read(firebaseCrashlyticsProvider).recordError(error, st);
 

@@ -26,16 +26,16 @@ class Assignment {
     this.attachments,
   });
 
-  Assignment.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    subjectId = json['subject_id'];
-    title = json['title'];
-    description = json['description'];
-    deadline = json['deadline'];
-    attachments = json['attachments'].cast<String>();
+  Assignment.fromJson(Map<String, dynamic>? json) {
+    id = json?['id'];
+    userId = json?['user_id'];
+    subjectId = json?['subject_id'];
+    title = json?['title'];
+    description = json?['description'];
+    deadline = json?['deadline'];
+    attachments = json?['attachments']?.cast<String>();
 
-    switch (json['status']) {
+    switch (json?['status']) {
       case 'done':
         status = AssignmentStatus.done;
         break;
@@ -44,33 +44,6 @@ class Assignment {
         status = AssignmentStatus.todo;
         break;
     }
-  }
-
-  Assignment.fromDoc(DocumentSnapshot doc) {
-    Map<String, dynamic> json = doc.data() ?? {};
-
-    id = doc.id;
-
-    userId = json['user_id'];
-    subjectId = json['subject_id'];
-    title = json['title'];
-    description = json['description'];
-    deadline = json['deadline'];
-    attachments = (json['attachments'] ?? []).cast<String>();
-
-    switch (json['status']) {
-      case 'done':
-        status = AssignmentStatus.done;
-        break;
-      case 'todo':
-      default:
-        status = AssignmentStatus.todo;
-        break;
-    }
-  }
-
-  Map<String, dynamic> toDoc() {
-    return toJson()..remove('id');
   }
 
   Map<String, dynamic> toJson() {

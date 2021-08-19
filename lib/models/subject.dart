@@ -19,31 +19,14 @@ class Subject {
     this.assignmentCount = 0,
   });
 
-  Subject.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    teacher = json['teacher'];
-    days = json['days'].cast<int>();
-    emoji = json['emoji'];
-    color = json['color'];
-    assignmentCount = json['assignment_count'];
-  }
-
-  Subject.fromDoc(DocumentSnapshot doc) {
-    Map<String, dynamic> json = doc.data() ?? {};
-
-    id = doc.id;
-
-    name = json['name'];
-    teacher = json['teacher'];
-    days = json['days'].cast<int>();
-    emoji = json['emoji'];
-    color = json['color'];
-    assignmentCount = json['assignment_count'];
-  }
-
-  Map<String, dynamic> toDoc() {
-    return toJson()..remove('id');
+  Subject.fromJson(Map<String, dynamic>? json) {
+    id = json?['id'];
+    name = json?['name'];
+    teacher = json?['teacher'];
+    days = json?['days'].cast<int>();
+    emoji = json?['emoji'];
+    color = json?['color'];
+    assignmentCount = json?['assignment_count'];
   }
 
   Map<String, dynamic> toJson() {

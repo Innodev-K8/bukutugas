@@ -23,17 +23,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^1.0.5
+  cloud_firestore: ^2.5.0
   cupertino_icons: ^1.0.2
   date_time_picker: ^2.0.0
   dotted_border: ^2.0.0
   dotted_line: ^3.0.0
   emoji_picker_flutter: ^1.0.3
-  firebase_analytics: ^8.0.0
-  firebase_auth: ^1.1.0
-  firebase_core: ^1.0.3
-  firebase_crashlytics: ^2.0.0
-  firebase_storage: ^8.0.4
+  firebase_analytics: ^8.3.0
+  firebase_auth: ^3.0.2
+  firebase_core: ^1.5.0
+  firebase_crashlytics: ^2.2.0
+  firebase_storage: ^10.0.2
   flutter_animated_dialog: ^2.0.0
   flutter_colorpicker: ^0.4.0
   flutter_hooks: ^0.16.0

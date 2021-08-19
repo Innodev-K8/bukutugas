@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bukutugas/models/assignment.dart';
+import 'package:bukutugas/models/subject.dart';
 import 'package:bukutugas/providers/analytic_provider.dart';
 import 'package:bukutugas/providers/firebase_providers.dart';
 import 'package:bukutugas/repositories/custom_exception.dart';
@@ -63,7 +64,7 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
       final snapshot =
           await _firestore.userSubjectAssignmentsRef(userId, subjectId).get();
 
-      return snapshot.docs.map((doc) => Assignment.fromDoc(doc)).toList();
+      return snapshot.docs.map((doc) => doc.data()).toList();
     } on FirebaseException catch (error) {
       throw CustomException(message: error.message);
     }
@@ -77,17 +78,18 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
     List<File> attachmentFiles = const [],
   }) async {
     try {
-      DocumentReference? docRef;
+      DocumentReference<Assignment>? docRef;
 
       await _firestore.runTransaction((transaction) async {
         // create the assignments
         docRef = await _firestore
             .userSubjectAssignmentsRef(userId, subjectId)
-            .add({});
+            .add(Assignment());
 
         if (docRef?.id == null) return;
 
-        final subjectRef = _firestore.userSubjectRef(userId, subjectId);
+        final DocumentReference<Subject> subjectRef =
+            _firestore.userSubjectRef(userId, subjectId);
 
         // set the assignment owner to later fetch using collection group
         assignment.userId = userId;
@@ -103,7 +105,7 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
           assignment.attachments?.add(await uploadTask.ref.getDownloadURL());
         }
 
-        transaction.set(docRef!, assignment.toDoc());
+        transaction.set<Assignment>(docRef!, assignment);
 
         transaction.update(subjectRef, {
           'assignment_count': FieldValue.increment(1),
@@ -154,7 +156,7 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
       await _firestore
           .userSubjectAssignmentsRef(userId, assignment.subjectId ?? subjectId)
           .doc(assignment.id)
-          .update(assignment.toDoc());
+          .update(assignment.toJson()..remove('id'));
 
       _read(analyticProvider).logAssignmentUpdate();
 
@@ -175,7 +177,7 @@ class SubjectAssignmentRepository extends BaseSubjectAssignmentRepository {
             .userSubjectAssignmentsRef(
                 userId, assignment.subjectId ?? subjectId)
             .doc(assignment.id);
-        final subjectRef = _firestore.userSubjectRef(
+        final DocumentReference<Subject> subjectRef = _firestore.userSubjectRef(
             userId, assignment.subjectId ?? subjectId);
 
         int counterAction = -1;

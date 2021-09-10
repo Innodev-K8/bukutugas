@@ -1,5 +1,5 @@
 import 'package:bukutugas/helpers/helpers.dart';
-import 'package:bukutugas/providers/ad/home_ad_provider.dart';
+import 'package:bukutugas/providers/ad/banner/home_ad_provider.dart';
 import 'package:bukutugas/widgets/banner_ad_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

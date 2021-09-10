@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -18,11 +18,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.0.11+11
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   cloud_firestore: ^2.5.0
   cupertino_icons: ^1.0.2
   date_time_picker: ^2.0.0
@@ -34,6 +32,8 @@ dependencies:
   firebase_core: ^1.5.0
   firebase_crashlytics: ^2.2.0
   firebase_storage: ^10.0.2
+  flutter:
+    sdk: flutter
   flutter_animated_dialog: ^2.0.0
   flutter_colorpicker: ^0.4.0
   flutter_hooks: ^0.16.0
@@ -46,10 +46,16 @@ dependencies:
   implicitly_animated_reorderable_list: ^0.4.0
   modal_bottom_sheet: ^2.0.0
   photo_view: ^0.11.1
+  firebase_remote_config: ^0.11.0
   shared_preferences: ^2.0.5
   timeago: ^3.0.2
   timezone: ^0.7.0
   url_launcher: ^6.0.9
+  google_mobile_ads:
+    git:
+      url: git@github.com:Innodev-K8/googleads-mobile-flutter.git
+      path: packages/google_mobile_ads
+      ref: feature/suamusica
 
 dev_dependencies:
   flutter_test:
@@ -59,7 +65,6 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

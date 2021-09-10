@@ -1,9 +1,11 @@
 import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/ad/subject_ad_provider.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/screens/subject/subject_sheet.dart';
 import 'package:bukutugas/styles.dart';
+import 'package:bukutugas/widgets/banner_ad_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,52 +29,60 @@ class SubjectScreen extends HookWidget {
         statusBarBrightness: Brightness.light,
         statusBarIconBrightness: Brightness.light,
       ),
-      child: Scaffold(
-        backgroundColor: subject?.color != null
-            ? HexColor(subject!.color!)
-            : Theme.of(context).backgroundColor,
-        body: Stack(
-          children: [
-            Container(
-              height: _headerHeight,
-              child: SubjectHeader(),
+      child: Column(
+        children: [
+          Expanded(
+            child: Scaffold(
+              backgroundColor: subject?.color != null
+                  ? HexColor(subject!.color!)
+                  : Theme.of(context).backgroundColor,
+              body: Stack(
+                children: [
+                  Container(
+                    height: _headerHeight,
+                    child: SubjectHeader(),
+                  ),
+                  DraggableScrollableSheet(
+                    initialChildSize: bodySizeFactor,
+                    minChildSize: bodySizeFactor,
+                    // 1 - (Tinggi Header + Paddingnya SafeArea)
+                    maxChildSize: 1 -
+                        ((MediaQuery.of(context).padding.top + 28 + 24 * 2) /
+                            size.height),
+                    builder: (context, scrollController) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).dialogBackgroundColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: SubjectSheet(),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+              floatingActionButton: _buildFab(context),
             ),
-            DraggableScrollableSheet(
-              initialChildSize: bodySizeFactor,
-              minChildSize: bodySizeFactor,
-              // 1 - (Tinggi Header + Paddingnya SafeArea)
-              maxChildSize: 1 -
-                  ((MediaQuery.of(context).padding.top + 28 + 24 * 2) /
-                      size.height),
-              builder: (context, scrollController) {
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dialogBackgroundColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      topRight: Radius.circular(12),
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      topRight: Radius.circular(12),
-                    ),
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: SubjectSheet(),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-        floatingActionButton: _buildFab(context),
+          ),
+          BannerAdWidget(adProvider: subjectAdProvider),
+        ],
       ),
     );
   }

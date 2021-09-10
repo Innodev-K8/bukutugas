@@ -2,6 +2,7 @@ import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:bukutugas/providers/notification/notification_provider.dart';
 import 'package:bukutugas/providers/notification/notification_type_provider.dart';
 import 'package:bukutugas/styles.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -41,7 +42,9 @@ class HomeHeader extends HookWidget {
                 ),
                 SizedBox(height: 24.0),
                 Text(
-                  'Mau ngerjain apa nih hari ini?',
+                  // TODO: hide show_ad
+                  'Mau ngerjain apa nih hari ini? ' +
+                      RemoteConfig.instance.getBool('show_ad').toString(),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline1,
                 ),

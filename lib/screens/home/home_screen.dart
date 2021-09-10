@@ -1,8 +1,10 @@
 import 'package:bukutugas/helpers/helpers.dart';
+import 'package:bukutugas/providers/ad/home_ad_provider.dart';
+import 'package:bukutugas/widgets/banner_ad_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:flutter/services.dart';
 
 import 'add_subject.dart';
 import 'home_header.dart';
@@ -29,64 +31,72 @@ class HomeScreen extends HookWidget {
         statusBarBrightness: Brightness.light,
         statusBarIconBrightness: Brightness.light,
       ),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Stack(
-          children: [
-            Container(
-              height: _headerHeight,
-              child: HomeHeader(),
-            ),
-            DraggableScrollableSheet(
-              initialChildSize: bodySizeFactor,
-              minChildSize: bodySizeFactor,
-              maxChildSize: sheetLimit,
-              builder: (context, scrollController) {
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dialogBackgroundColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      topRight: Radius.circular(12),
-                    ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
+              body: Stack(
+                children: [
+                  Container(
+                    height: _headerHeight,
+                    child: HomeHeader(),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      topRight: Radius.circular(12),
-                    ),
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: HomeSheet(),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showMaterialModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.transparent,
-              builder: (context) => Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: SubjectBottomSheetDialog(),
+                  DraggableScrollableSheet(
+                    initialChildSize: bodySizeFactor,
+                    minChildSize: bodySizeFactor,
+                    maxChildSize: sheetLimit,
+                    builder: (context, scrollController) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).dialogBackgroundColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: HomeSheet(),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
-            );
-          },
-          elevation: 6,
-          child: const Icon(Icons.add_rounded),
-          backgroundColor: darken(
-            Theme.of(context).backgroundColor,
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  showMaterialModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: SubjectBottomSheetDialog(),
+                    ),
+                  );
+                },
+                elevation: 6,
+                child: const Icon(Icons.add_rounded),
+                backgroundColor: darken(
+                  Theme.of(context).backgroundColor,
+                ),
+              ),
+            ),
           ),
-        ),
+          BannerAdWidget(adProvider: homeAdProvider),
+        ],
       ),
     );
   }

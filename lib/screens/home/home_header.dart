@@ -2,7 +2,6 @@ import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:bukutugas/providers/notification/notification_provider.dart';
 import 'package:bukutugas/providers/notification/notification_type_provider.dart';
 import 'package:bukutugas/styles.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -42,9 +41,7 @@ class HomeHeader extends HookWidget {
                 ),
                 SizedBox(height: 24.0),
                 Text(
-                  // TODO: hide show_ad
-                  'Mau ngerjain apa nih hari ini? ' +
-                      RemoteConfig.instance.getBool('show_ad').toString(),
+                  'Mau ngerjain apa nih hari ini?',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline1,
                 ),
@@ -124,25 +121,24 @@ class NotificationTypeSelector extends HookWidget {
           spacing: 8,
           children: [
             for (final type in NotificationType.values)
-             GestureDetector(
-              onTap: () {
-                selected.value = type;
-              },
-              child: Chip(
-                backgroundColor: selected.value == type
-                    ? Theme.of(context).accentColor
-                    : Theme.of(context).bottomSheetTheme.backgroundColor,
-                label: Text(
-                  notificationTypeToString(type),
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
-                        color: selected.value == type
-                            ? Theme.of(context).primaryColorLight
-                            : Theme.of(context).backgroundColor,
-                      ),
+              GestureDetector(
+                onTap: () {
+                  selected.value = type;
+                },
+                child: Chip(
+                  backgroundColor: selected.value == type
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).bottomSheetTheme.backgroundColor,
+                  label: Text(
+                    notificationTypeToString(type),
+                    style: Theme.of(context).textTheme.headline5!.copyWith(
+                          color: selected.value == type
+                              ? Theme.of(context).primaryColorLight
+                              : Theme.of(context).backgroundColor,
+                        ),
+                  ),
                 ),
               ),
-            ),
-            
             GestureDetector(
               onTap: () {
                 selected.value = null;

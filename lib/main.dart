@@ -1,4 +1,5 @@
 import 'package:bukutugas/models/assignment.dart';
+import 'package:bukutugas/providers/ad/interstitial/done_assignment_ad_provider.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/providers/auth/auth_controller.dart';
 import 'package:bukutugas/providers/firebase_providers.dart';
@@ -103,6 +104,11 @@ class AppWrapper extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final auth = useProvider(authProvider);
+
+    // preload interstitial ads
+    useEffect(() {
+      context.read(doneAssignmentAdProvider);
+    });
 
     return FutureBuilder(
         future: flutterLocalNotificationsPlugin.initialize(

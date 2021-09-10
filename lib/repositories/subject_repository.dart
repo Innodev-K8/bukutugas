@@ -59,8 +59,7 @@ class SubjectRepository extends BaseSubjectRepository {
   Future<String> createSubject(
       {required String userId, required Subject subject}) async {
     try {
-      final docRef =
-          await _firestore.userSubjectsRef(userId).add(subject);
+      final docRef = await _firestore.userSubjectsRef(userId).add(subject);
 
       _read(analyticProvider).logSubjectCreate();
 

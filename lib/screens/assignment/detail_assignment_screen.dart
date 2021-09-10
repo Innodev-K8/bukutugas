@@ -1,11 +1,13 @@
 import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/models/assignment.dart';
 import 'package:bukutugas/providers/ad/banner/assignment_ad_provider.dart';
+import 'package:bukutugas/providers/ad/interstitial/done_assignment_ad_provider.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/screens/assignment/create_assignment_screen.dart';
 import 'package:bukutugas/styles.dart';
 import 'package:bukutugas/widgets/banner_ad_widget.dart';
 import 'package:bukutugas/widgets/dottted_separator.dart';
+import 'package:bukutugas/widgets/small_loading_indicator.dart';
 import 'package:bukutugas/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -386,10 +388,14 @@ class DetailAssignmentScreen extends HookWidget {
 
   TextButton _buildMarkDoneButton(
       Assignment? assignment, BuildContext context) {
+    final isLoading = useState(false);
+
     return TextButton(
       onPressed: () async {
         if (assignment == null || assignment.status == AssignmentStatus.done)
           return;
+
+        isLoading.value = true;
 
         await context
             .read(subjectAssignmentsProvider.notifier)
@@ -399,7 +405,9 @@ class DetailAssignmentScreen extends HookWidget {
         context.read(selectedAssignmentProvider).state = assignment
           ..status = AssignmentStatus.done;
 
-        showAnimatedDialog(
+        isLoading.value = false;
+
+        await showAnimatedDialog(
           context: context,
           animationType: DialogTransitionType.scale,
           duration: Duration(milliseconds: 1200),
@@ -448,13 +456,21 @@ class DetailAssignmentScreen extends HookWidget {
             );
           },
         );
+
+        try {
+          await context.read(doneAssignmentAdProvider)?.show();
+
+          context.refresh(doneAssignmentAdProvider.notifier);
+        } catch (_) {}
       },
-      child: Text(
-        'Selesai',
-        style: Theme.of(context).textTheme.headline4!.copyWith(
-              color: Theme.of(context).primaryColorLight,
+      child: isLoading.value
+          ? SmallLoadingIndicator()
+          : Text(
+              'Selesai',
+              style: Theme.of(context).textTheme.headline4!.copyWith(
+                    color: Theme.of(context).primaryColorLight,
+                  ),
             ),
-      ),
       style: TextButton.styleFrom(
         backgroundColor: Theme.of(context).accentColor,
         padding: const EdgeInsets.symmetric(
@@ -466,11 +482,17 @@ class DetailAssignmentScreen extends HookWidget {
   }
 
   TextButton _buildMarkTodoButton(
-      Assignment? assignment, BuildContext context) {
+    Assignment? assignment,
+    BuildContext context,
+  ) {
+    final isLoading = useState(false);
+
     return TextButton(
       onPressed: () async {
         if (assignment == null || assignment.status == AssignmentStatus.todo)
           return;
+
+        isLoading.value = true;
 
         await context
             .read(subjectAssignmentsProvider.notifier)
@@ -479,6 +501,8 @@ class DetailAssignmentScreen extends HookWidget {
 
         context.read(selectedAssignmentProvider).state = assignment
           ..status = AssignmentStatus.todo;
+
+        isLoading.value = false;
 
         showAnimatedDialog(
           context: context,
@@ -530,12 +554,16 @@ class DetailAssignmentScreen extends HookWidget {
           },
         );
       },
-      child: Text(
-        'Eh Belum Selesai..',
-        style: Theme.of(context).textTheme.headline4!.copyWith(
-              color: Theme.of(context).primaryColorLight,
+      child: isLoading.value
+          ? SmallLoadingIndicator(
+              color: Theme.of(context).accentColor,
+            )
+          : Text(
+              'Eh Belum Selesai..',
+              style: Theme.of(context).textTheme.headline4!.copyWith(
+                    color: Theme.of(context).primaryColorLight,
+                  ),
             ),
-      ),
       style: TextButton.styleFrom(
         backgroundColor: Theme.of(context).primaryColor,
         padding: const EdgeInsets.symmetric(

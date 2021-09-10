@@ -1,3 +1,4 @@
+import 'package:bukutugas/providers/ad/ad_unit_ids.dart';
 import 'package:bukutugas/providers/ad/interstitial_ad_callback_provider.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -17,7 +18,7 @@ class DoneAssignmentAdNotifier extends StateNotifier<InterstitialAd?> {
     if (!showAd) return;
 
     InterstitialAd.load(
-      adUnitId: 'ca-app-pub-3940256099942544/1033173712',
+      adUnitId: AdUnitIds.doneAssignmentAd,
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {

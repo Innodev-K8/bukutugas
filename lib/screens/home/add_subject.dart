@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/ad/interstitial/done_assignment_ad_provider.dart';
 import 'package:bukutugas/providers/available_color_provider.dart';
 import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/widgets/widgets.dart';
@@ -145,7 +146,7 @@ class SubjectBottomSheetDialog extends HookWidget {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
                   clearFocus(context);
 
                   var validated = formKey.currentState?.validate();
@@ -163,13 +164,26 @@ class SubjectBottomSheetDialog extends HookWidget {
                               ..days = subjectDay.value,
                           );
                     } else {
-                      context.read(subjectListProvider.notifier).addSubject(
+                      await context
+                          .read(subjectListProvider.notifier)
+                          .addSubject(
                             name: subjectName.value,
                             teacher: subjectTeacher.value,
                             emoji: subjectEmoji.value,
                             color: subjectColor.value,
                             days: subjectDay.value,
                           );
+
+                      try {
+                        final rand = Random();
+                        final isShowingAd = rand.nextBool();
+
+                        if (isShowingAd) {
+                          await context.read(doneAssignmentAdProvider)?.show();
+
+                          context.refresh(doneAssignmentAdProvider.notifier);
+                        }
+                      } catch (_) {}
                     }
 
                     Navigator.of(context).pop();

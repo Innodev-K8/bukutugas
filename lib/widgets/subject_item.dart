@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:bukutugas/helpers/date.dart';
 import 'package:bukutugas/helpers/helpers.dart';
 import 'package:bukutugas/models/subject.dart';
+import 'package:bukutugas/providers/ad/interstitial/done_assignment_ad_provider.dart';
 import 'package:bukutugas/providers/subject/subject_list_provider.dart';
 import 'package:bukutugas/screens/home/add_subject.dart';
 import 'package:bukutugas/styles.dart';
@@ -270,12 +273,29 @@ class SubjectItem extends HookWidget {
                                                     color: Colors.white,
                                                   ),
                                             ),
-                                            onPressed: () {
-                                              context
+                                            onPressed: () async {
+                                              await context
                                                   .read(subjectListProvider
                                                       .notifier)
                                                   .deleteSubject(
                                                       subject: subject);
+
+                                              try {
+                                                final rand = Random();
+                                                final isShowingAd =
+                                                    rand.nextBool();
+
+                                                if (isShowingAd) {
+                                                  await context
+                                                      .read(
+                                                          doneAssignmentAdProvider)
+                                                      ?.show();
+
+                                                  context.refresh(
+                                                      doneAssignmentAdProvider
+                                                          .notifier);
+                                                }
+                                              } catch (_) {}
 
                                               Navigator.of(context).pop();
                                             },

@@ -1,4 +1,7 @@
 import 'package:bukutugas/models/assignment.dart';
+import 'package:bukutugas/providers/ad/banner/assignment_ad_provider.dart';
+import 'package:bukutugas/providers/ad/banner/home_ad_provider.dart';
+import 'package:bukutugas/providers/ad/banner/subject_ad_provider.dart';
 import 'package:bukutugas/providers/ad/interstitial/done_assignment_ad_provider.dart';
 import 'package:bukutugas/providers/assignment/subject_assignments_provider.dart';
 import 'package:bukutugas/providers/auth/auth_controller.dart';
@@ -105,8 +108,11 @@ class AppWrapper extends HookWidget {
   Widget build(BuildContext context) {
     final auth = useProvider(authProvider);
 
-    // preload interstitial ads
+    // preload ads
     useEffect(() {
+      context.read(homeAdProvider);
+      context.read(subjectAdProvider);
+      context.read(assignmentAdProvider);
       context.read(doneAssignmentAdProvider);
     });
 
